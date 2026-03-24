@@ -121,47 +121,199 @@
 </nav>
 
 
-<!-- ════════ SECTION 1 — THE MAN ════════ -->
-<section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
-  <div class="absolute inset-0">
-    <img src="h1.jpeg" alt="TinglyTones"
-         class="w-full h-full object-cover object-center md:object-top"
-         style="filter:brightness(.9) saturate(1.1);">
-    <div class="absolute inset-0"
-         style="background:linear-gradient(120deg,rgba(3,1,10,.72) 0%,rgba(3,1,10,.1) 50%,rgba(3,1,10,.45) 100%);"></div>
-    <div class="absolute inset-0"
-         style="background:radial-gradient(ellipse at 15% 80%,rgba(201,168,76,.07) 0%,transparent 50%);"></div>
-    <div class="absolute bottom-0 left-0 right-0 h-48 fade-bottom"></div>
-  </div>
+<!-- ════════ SECTION 1 — THE MAN (SCROLL ANIMATION) ════════ -->
+<section id="hero" style="height:500vh;position:relative;">
+  <div id="hero-sticky" style="position:sticky;top:0;height:100vh;overflow:hidden;">
 
-  <div class="relative z-10 w-full max-w-xl px-6 md:px-16 lg:px-24 pt-28 pb-20">
-    <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-5">For Her Ears Only</p>
-    <h1 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.8rem,9vw,6.5rem)]"
-        style="transition-delay:.1s">
-      The Man<br>
-      <em class="font-normal text-blush" style="font-size:.88em">Behind the Voice</em>
-    </h1>
-    <p class="reveal font-elegant text-[clamp(1.1rem,3vw,1.4rem)] text-muted leading-relaxed mb-10"
-       style="transition-delay:.2s">
-      Close your eyes.<br>Let his voice find you in the dark.
-    </p>
-    <div class="reveal flex flex-wrap gap-4" style="transition-delay:.3s">
-      <a href="#voice"
-         class="px-7 py-4 bg-gold text-void text-[.68rem] tracking-[.3em] uppercase font-semibold hover:bg-glow transition-colors rounded-sm">
-        Hear Him
-      </a>
-      <a href="#pricing"
-         class="px-7 py-4 border border-ivory/20 text-ivory text-[.68rem] tracking-[.3em] uppercase hover:border-gold hover:text-gold transition-all rounded-sm">
-        Choose Your Tier
-      </a>
+    <!-- Loading Screen -->
+    <div id="hero-loader" style="
+      position:absolute;inset:0;z-index:100;
+      background:#03010a;
+      display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      gap:32px;
+      transition:opacity 0.8s ease;
+    ">
+      <div style="
+        font-family:'Playfair Display',serif;
+        font-size:clamp(18px,3vw,28px);
+        letter-spacing:0.35em;
+        color:#c9a84c;
+        text-transform:uppercase;
+        font-weight:400;
+      ">Tingly Tones</div>
+      <div style="width:min(320px,70vw);display:flex;flex-direction:column;gap:10px;">
+        <div style="width:100%;height:1px;background:rgba(201,168,76,0.2);position:relative;overflow:hidden;">
+          <div id="hero-progress-bar" style="position:absolute;left:0;top:0;height:100%;width:0%;background:#c9a84c;transition:width 0.15s ease;"></div>
+        </div>
+        <div style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:0.2em;color:rgba(201,168,76,0.5);text-align:center;">
+          <span id="hero-progress-pct">0%</span>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-    <span class="text-[.6rem] tracking-[.4em] text-muted uppercase">Scroll</span>
-    <div class="w-px h-10 bg-gold/50 animate-pulse"></div>
+    <!-- Canvas -->
+    <canvas id="hero-canvas" style="
+      position:absolute;inset:0;width:100%;height:100%;
+      -webkit-mask-image:radial-gradient(ellipse 80% 75% at 50% 50%, black 45%, transparent 80%);
+      mask-image:radial-gradient(ellipse 80% 75% at 50% 50%, black 45%, transparent 80%);
+      transform-origin:center center;will-change:transform;
+    "></canvas>
+
+    <!-- Phase 1: Left-aligned, progress 0.05–0.30 -->
+    <div class="hero-phase" id="phase1" style="
+      position:absolute;inset:0;display:flex;align-items:center;
+      padding:0 clamp(24px,6vw,100px);pointer-events:none;
+      opacity:0;transition:opacity 0.6s ease,transform 0.6s ease;transform:translateY(20px);
+    ">
+      <div style="max-width:520px;">
+        <p style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase;margin:0 0 16px 0;">For Her Ears Only</p>
+        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,76px);font-weight:400;line-height:1.1;color:#f5f0eb;margin:0 0 20px 0;letter-spacing:-0.01em;">
+          The Man<br>Behind<br>the Voice
+        </h1>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.8vw,22px);color:#e8a0a0;font-style:italic;margin:0 0 36px 0;line-height:1.6;font-weight:300;">
+          Close your eyes. Let his voice<br>find you in the dark.
+        </p>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;pointer-events:all;">
+          <a href="#voice" style="font-family:'Inter',sans-serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#03010a;background:#c9a84c;padding:14px 28px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">Hear Him</a>
+          <a href="#pricing" style="font-family:'Inter',sans-serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#c9a84c;border:1px solid rgba(201,168,76,0.4);padding:14px 28px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(201,168,76,0.9)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.4)'">Choose Your Tier</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2: Centered, progress 0.35–0.60 -->
+    <div class="hero-phase" id="phase2" style="
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+      pointer-events:none;opacity:0;transition:opacity 0.6s ease,transform 0.6s ease;transform:translateY(20px);
+    ">
+      <div>
+        <p style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.35em;color:rgba(201,168,76,0.55);text-transform:uppercase;margin:0 0 24px 0;">The Collection</p>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,68px);font-weight:400;color:#f5f0eb;line-height:1.15;margin:0;letter-spacing:-0.01em;">
+          150+ NSFW Audios.<br><em style="color:#c9a84c;">One Voice.</em>
+        </p>
+      </div>
+    </div>
+
+    <!-- Phase 3: Right-aligned, progress 0.65–0.90 -->
+    <div class="hero-phase" id="phase3" style="
+      position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;
+      padding:0 clamp(24px,6vw,100px);pointer-events:none;
+      opacity:0;transition:opacity 0.6s ease,transform 0.6s ease;transform:translateY(20px);
+    ">
+      <div style="max-width:400px;text-align:right;">
+        <p style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.3em;color:rgba(232,160,160,0.6);text-transform:uppercase;margin:0 0 16px 0;">Now Playing</p>
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,54px);font-weight:400;color:#f5f0eb;margin:0 0 16px 0;letter-spacing:-0.01em;line-height:1.15;">The Vampire</h2>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.6vw,20px);color:#857878;font-style:italic;margin:0 0 28px 0;line-height:1.6;">
+          He doesn't ask permission.<br>He only asks how long<br>you want him to stay.
+        </p>
+        <a href="#vampire" style="pointer-events:all;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#c9a84c;text-decoration:none;letter-spacing:0.05em;border-bottom:1px solid rgba(201,168,76,0.35);padding-bottom:2px;transition:all 0.2s;display:inline-block;" onmouseover="this.style.borderColor='rgba(201,168,76,0.9)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.35)'">Surrender &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Bottom fade to next section -->
+    <div style="position:absolute;bottom:0;left:0;right:0;height:180px;background:linear-gradient(to bottom,transparent,#03010a);pointer-events:none;z-index:10;"></div>
+
   </div>
 </section>
+
+<script>
+(function(){
+  'use strict';
+  const TOTAL_FRAMES = 160;
+  const BATCH_SIZE   = 20;
+  const FRAME_PATH   = i => 'frames/frame-' + String(i).padStart(4,'0') + '.webp';
+
+  const section     = document.getElementById('hero');
+  const canvas      = document.getElementById('hero-canvas');
+  const ctx         = canvas.getContext('2d');
+  const loader      = document.getElementById('hero-loader');
+  const progressBar = document.getElementById('hero-progress-bar');
+  const progressPct = document.getElementById('hero-progress-pct');
+  const phase1      = document.getElementById('phase1');
+  const phase2      = document.getElementById('phase2');
+  const phase3      = document.getElementById('phase3');
+
+  const frames    = new Array(TOTAL_FRAMES).fill(null);
+  let loadedCount = 0;
+  let allLoaded   = false;
+  let currentFrame = 0;
+  let lastFrame    = -1;
+
+  function resizeCanvas() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    if (frames[currentFrame]) drawFrame(currentFrame);
+  }
+
+  function drawFrame(index) {
+    const img = frames[index];
+    if (!img || !img.complete) return;
+    const cw = canvas.width, ch = canvas.height;
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    const scale = Math.max(cw / iw, ch / ih);
+    const dw = iw * scale, dh = ih * scale;
+    ctx.clearRect(0, 0, cw, ch);
+    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+  }
+
+  function renderLoop() {
+    if (currentFrame !== lastFrame) {
+      drawFrame(currentFrame);
+      lastFrame = currentFrame;
+    }
+    requestAnimationFrame(renderLoop);
+  }
+
+  function setPhase(el, visible) {
+    el.style.opacity   = visible ? '1' : '0';
+    el.style.transform = visible ? 'translateY(0)' : 'translateY(20px)';
+  }
+
+  function onScroll() {
+    if (!allLoaded) return;
+    const rect     = section.getBoundingClientRect();
+    const progress = Math.min(Math.max(-rect.top / (rect.height - window.innerHeight), 0), 1);
+    currentFrame   = Math.min(Math.floor(progress * TOTAL_FRAMES), TOTAL_FRAMES - 1);
+    canvas.style.transform = 'rotate(' + (-1 + progress * 3).toFixed(3) + 'deg)';
+    setPhase(phase1, progress >= 0.05 && progress <= 0.30);
+    setPhase(phase2, progress >= 0.35 && progress <= 0.60);
+    setPhase(phase3, progress >= 0.65 && progress <= 0.90);
+  }
+
+  function loadBatch(start) {
+    const end = Math.min(start + BATCH_SIZE, TOTAL_FRAMES);
+    const promises = [];
+    for (let i = start; i < end; i++) {
+      promises.push(new Promise(resolve => {
+        const img = new Image();
+        img.onload  = () => { frames[i] = img; loadedCount++; resolve(); };
+        img.onerror = () => { loadedCount++; resolve(); };
+        img.src = FRAME_PATH(i);
+      }));
+    }
+    Promise.all(promises).then(() => {
+      const pct = Math.round(loadedCount / TOTAL_FRAMES * 100);
+      progressBar.style.width = pct + '%';
+      progressPct.textContent = pct + '%';
+      if (start === 0 && frames[0]) drawFrame(0);
+      if (end < TOTAL_FRAMES) {
+        loadBatch(end);
+      } else {
+        allLoaded = true;
+        loader.style.opacity = '0';
+        setTimeout(() => { loader.style.display = 'none'; }, 800);
+        onScroll();
+      }
+    });
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  renderLoop();
+  loadBatch(0);
+})();
+</script>
 
 
 <!-- ════════ SECTION 2 — THE VAMPIRE ════════ -->
