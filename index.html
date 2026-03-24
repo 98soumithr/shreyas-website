@@ -433,22 +433,23 @@
   Three pillars: audio intimacy, character range, lifetime access.
   Stats row anchors with social proof. Dark atmospheric glow.
 ════════ -->
-<section id="experience" class="relative py-24 md:py-44 overflow-hidden">
-  <!-- Rose petals video background -->
-  <div class="absolute inset-0">
-    <video autoplay muted loop playsinline
-           class="w-full h-full object-cover"
-           style="filter:brightness(.72) saturate(1.6);">
-      <source src="Small_rose_petals_202603240150.mp4" type="video/mp4">
-    </video>
-    <div class="absolute inset-0"
-         style="background:linear-gradient(180deg,#03010a 0%,rgba(8,2,16,.45) 25%,rgba(8,2,16,.45) 75%,#03010a 100%);"></div>
-    <div class="absolute inset-0 pointer-events-none"
-         style="background:radial-gradient(ellipse at 25% 50%,rgba(201,168,76,.08) 0%,transparent 45%),
-                radial-gradient(ellipse at 75% 50%,rgba(139,38,53,.1) 0%,transparent 45%);"></div>
-  </div>
+<section id="experience" style="height:400vh;position:relative;">
+  <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
 
-  <div class="relative z-10 px-6 md:px-12 lg:px-24 max-w-6xl mx-auto">
+    <!-- s3 scroll animation canvas -->
+    <canvas id="s3-canvas" style="
+      position:absolute;inset:0;width:100%;height:100%;
+      mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 50%,transparent 100%);
+      -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 50%,transparent 100%);
+    "></canvas>
+
+    <!-- Dark overlays -->
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#03010a 0%,rgba(8,2,16,.35) 20%,rgba(8,2,16,.35) 80%,#03010a 100%);pointer-events:none;"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;
+         background:radial-gradient(ellipse at 25% 50%,rgba(201,168,76,.06) 0%,transparent 45%),
+                    radial-gradient(ellipse at 75% 50%,rgba(139,38,53,.08) 0%,transparent 45%);"></div>
+
+  <div class="relative z-10 px-6 md:px-12 lg:px-24 max-w-6xl mx-auto" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
 
     <div class="text-center mb-20">
       <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-4">150+ NSFW Audios &amp; Growing</p>
@@ -541,8 +542,75 @@
       </div>
     </div>
 
-  </div>
+  </div><!-- /content -->
+  </div><!-- /sticky -->
 </section>
+
+<script>
+(function(){
+  'use strict';
+  const TOTAL = 160;
+  const BATCH = 20;
+  const PATH  = i => 'frames-s3/frame-' + String(i).padStart(4,'0') + '.webp';
+
+  const section = document.getElementById('experience');
+  const canvas  = document.getElementById('s3-canvas');
+  const ctx     = canvas.getContext('2d');
+  const frames  = new Array(TOTAL).fill(null);
+  let allReady = false, cur = 0, last = -1;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    if (frames[cur]) draw(cur);
+  }
+
+  function draw(i) {
+    const img = frames[i];
+    if (!img || !img.complete) return;
+    const cw = canvas.width, ch = canvas.height;
+    const sc = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+    const dw = img.naturalWidth * sc, dh = img.naturalHeight * sc;
+    ctx.clearRect(0, 0, cw, ch);
+    ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+  }
+
+  function loop() {
+    if (cur !== last) { draw(cur); last = cur; }
+    requestAnimationFrame(loop);
+  }
+
+  function onScroll() {
+    if (!allReady) return;
+    const rect = section.getBoundingClientRect();
+    const p = Math.min(Math.max(-rect.top / (rect.height - window.innerHeight), 0), 1);
+    cur = Math.min(Math.floor(p * TOTAL), TOTAL - 1);
+  }
+
+  function loadBatch(start) {
+    const end = Math.min(start + BATCH, TOTAL);
+    const ps = [];
+    for (let i = start; i < end; i++) {
+      ps.push(new Promise(res => {
+        const img = new Image();
+        img.onload = img.onerror = () => { frames[i] = img; res(); };
+        img.src = PATH(i);
+      }));
+    }
+    Promise.all(ps).then(() => {
+      if (start === 0 && frames[0]) draw(0);
+      if (end < TOTAL) loadBatch(end);
+      else { allReady = true; onScroll(); }
+    });
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  loop();
+  loadBatch(0);
+})();
+</script>
 
 
 <!-- ════════ SECTION 4 — VOICE BUTTON ════════ -->
