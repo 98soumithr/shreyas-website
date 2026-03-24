@@ -1,606 +1,755 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>James Lavoie</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinglyTones — For Her Ears Only</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void:    '#03010a',
+            dark:    '#08030f',
+            wine:    '#1a0a2e',
+            crimson: '#6b0f1a',
+            blood:   '#8b2635',
+            gold:    '#c9a84c',
+            glow:    '#f0d080',
+            blush:   '#e8a0a0',
+            ivory:   '#f5f0eb',
+            muted:   '#857878',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            elegant: ['"Cormorant Garamond"', 'serif'],
+            body:    ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    body { background: #03010a; overflow-x: hidden; }
 
-    /* ══ SCROLL PROGRESS ══ */
-    #scroll-progress-bar {
-      position: fixed; top: 0; left: 0;
-      height: 2px; width: 0%;
-      background: linear-gradient(to right, #7a0020, #c41e3a);
-      z-index: 500;
-      box-shadow: 0 0 8px rgba(196,30,58,0.7);
-    }
+    /* ── Scroll reveal ── */
+    .reveal        { opacity:0; transform:translateY(40px);  transition: opacity .85s ease, transform .85s ease; }
+    .reveal-left   { opacity:0; transform:translateX(-50px); transition: opacity .85s ease, transform .85s ease; }
+    .reveal-right  { opacity:0; transform:translateX(50px);  transition: opacity .85s ease, transform .85s ease; }
+    .reveal.on, .reveal-left.on, .reveal-right.on { opacity:1; transform:none; }
 
-    /* ══ NAV ══ */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 300;
-      display: flex; justify-content: flex-end; gap: 12px;
-      padding: 20px 36px;
-      pointer-events: none;
+    /* ── Shimmer text ── */
+    .shimmer {
+      background: linear-gradient(90deg,#c9a84c 0%,#f0d080 45%,#c9a84c 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3.5s linear infinite;
     }
-    .nav-btn {
-      pointer-events: all;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px; font-weight: 500; letter-spacing: 0.04em;
-      padding: 9px 22px; border-radius: 999px;
-      border: 1.5px solid rgba(242,232,213,0.4);
-      color: #f2e8d5;
-      background: rgba(5,0,8,0.6);
-      backdrop-filter: blur(14px);
-      cursor: pointer; text-decoration: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .nav-btn:hover { border-color: rgba(242,232,213,0.75); background: rgba(5,0,8,0.85); }
-    .nav-btn.solid { background: #7a0020; border-color: #7a0020; }
-    .nav-btn.solid:hover { background: #9a0028; border-color: #9a0028; }
+    @keyframes shimmer { to { background-position: 200% center; } }
 
-    /* ══ HERO — VIDEO ══ */
-    #hero {
-      position: relative; height: 100vh;
-      overflow: hidden; background: #050008;
+    /* ── Voice button rings ── */
+    .vring {
+      position:absolute; border-radius:50%;
+      border: 1.5px solid rgba(201,168,76,.5);
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      animation: vring 2.8s ease-out infinite;
     }
-    #hero-video {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover; z-index: 0;
-    }
-    .hero-grad {
-      position: absolute; inset: 0; z-index: 1;
-      background:
-        linear-gradient(to bottom,
-          rgba(5,0,8,0.35) 0%,
-          rgba(5,0,8,0.0)  25%,
-          rgba(5,0,8,0.0)  55%,
-          rgba(5,0,8,0.7)  80%,
-          rgba(5,0,8,1.0)  100%),
-        linear-gradient(to right,
-          rgba(5,0,8,0.35) 0%, transparent 16%,
-          transparent 84%, rgba(5,0,8,0.35) 100%);
-    }
-    .hero-overlay {
-      position: absolute; inset: 0; z-index: 2;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-end;
-      padding-bottom: 90px; text-align: center;
-      pointer-events: none;
-    }
-    #hero-title {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(40px, 7vw, 88px);
-      font-weight: 700; letter-spacing: 0.2em; color: #f2e8d5;
-      text-shadow: 0 2px 40px rgba(0,0,0,0.9), 0 0 70px rgba(196,30,58,0.18);
-      line-height: 1;
-    }
-    .hero-rule {
-      width: 50px; height: 1px;
-      background: linear-gradient(to right, transparent, rgba(196,30,58,0.75), transparent);
-      margin: 18px auto;
-    }
-    #hero-sub {
-      font-family: 'Cormorant Garamond', serif; font-style: italic;
-      font-size: clamp(14px, 2vw, 20px); font-weight: 300;
-      letter-spacing: 0.1em; color: rgba(242,232,213,0.8);
-      text-shadow: 0 2px 20px rgba(0,0,0,0.8);
-    }
-    #scroll-hint {
-      position: absolute; bottom: 38px; left: 50%;
-      transform: translateX(-50%); z-index: 3;
-      display: flex; flex-direction: column; align-items: center; gap: 5px;
-      opacity: 1; transition: opacity 0.3s;
-    }
-    #scroll-hint span {
-      display: block; width: 18px; height: 1.5px;
-      background: rgba(242,232,213,0.6); border-radius: 2px;
-    }
-    #scroll-hint span:first-child { transform: rotate(40deg) translateX(5px); }
-    #scroll-hint span:last-child  { transform: rotate(-40deg) translateX(-5px); }
-
-    /* ══ PRICING ══ */
-    #tiers {
-      background: #060009;
-      position: relative;
-      overflow: hidden;
-      padding: 120px 32px 140px;
+    .vring:nth-child(2) { animation-delay:.9s; }
+    .vring:nth-child(3) { animation-delay:1.8s; }
+    @keyframes vring {
+      0%   { width:96px;  height:96px;  opacity:.9; }
+      100% { width:260px; height:260px; opacity:0; }
     }
 
-    /* ── background static elements ── */
-    .bg-orb {
-      position: absolute; border-radius: 50%;
-      pointer-events: none; filter: blur(90px);
+    /* ── Particles ── */
+    .particle { position:absolute; border-radius:50%; animation: float linear infinite; }
+    @keyframes float {
+      0%   { transform:translateY(0)    rotate(0deg);   opacity:.5; }
+      50%  { transform:translateY(-22px) rotate(180deg); opacity:.2; }
+      100% { transform:translateY(0)    rotate(360deg); opacity:.5; }
     }
 
-    /* decorative SVG lines layer */
-    #bg-lines {
-      position: absolute; inset: 0;
-      pointer-events: none; z-index: 0;
-      opacity: 0.12;
-    }
+    /* ── Pricing card ── */
+    .pcard { transition:transform .3s ease, box-shadow .3s ease; cursor:pointer; }
+    .pcard:hover { transform:translateY(-8px); box-shadow:0 24px 60px rgba(201,168,76,.12); }
+    .pcard.featured { box-shadow:0 0 40px rgba(201,168,76,.18); }
 
-    /* scattered bokeh dots */
-    .bokeh-dot {
-      position: absolute; border-radius: 50%;
-      pointer-events: none;
-      animation: bokehPulse ease-in-out infinite;
-    }
-    @keyframes bokehPulse {
-      0%,100% { opacity: 0.12; transform: scale(1); }
-      50%      { opacity: 0.32; transform: scale(1.4); }
-    }
+    /* ── Ornamental divider ── */
+    .orn { display:flex; align-items:center; gap:14px; justify-content:center; }
+    .orn::before { content:''; height:1px; width:70px; background:linear-gradient(90deg,transparent,rgba(201,168,76,.6)); }
+    .orn::after  { content:''; height:1px; width:70px; background:linear-gradient(90deg,rgba(201,168,76,.6),transparent); }
 
-    /* falling petal */
-    @keyframes petalFall {
-      0%   { transform: translateY(-80px) rotate(0deg) translateX(0); opacity: 0; }
-      6%   { opacity: 0.7; }
-      88%  { opacity: 0.45; }
-      100% { transform: translateY(110vh) rotate(520deg) translateX(35px); opacity: 0; }
-    }
-    .petal {
-      position: absolute; top: 0; pointer-events: none;
-      animation: petalFall linear infinite;
-      z-index: 1;
-    }
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:#03010a; }
+    ::-webkit-scrollbar-thumb { background:rgba(201,168,76,.2); border-radius:2px; }
 
-    /* horizontal accent lines */
-    .h-accent {
-      position: absolute; left: 0; right: 0; height: 1px;
-      pointer-events: none; z-index: 0;
-    }
+    /* ── Horizontal pricing scroll ── */
+    .snap-row { scrollbar-width:none; }
+    .snap-row::-webkit-scrollbar { display:none; }
 
-    /* top separator */
-    #tiers::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(to right,
-        transparent 0%, rgba(196,30,58,0.15) 20%,
-        rgba(196,30,58,0.5) 50%, rgba(196,30,58,0.15) 80%, transparent 100%);
-      z-index: 2;
-    }
-
-    /* ── header ── */
-    .tiers-header {
-      text-align: center; position: relative;
-      margin-bottom: 70px; z-index: 3;
-    }
-    .tiers-eyebrow {
-      font-family: 'Cinzel', serif;
-      font-size: 9.5px; font-weight: 600; letter-spacing: 0.45em;
-      color: rgba(196,30,58,0.8);
-      text-transform: uppercase; margin-bottom: 16px;
-    }
-    .tiers-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(28px, 3.5vw, 50px);
-      font-weight: 400; font-style: italic;
-      color: #f2e8d5; line-height: 1.2;
-    }
-    .tiers-divider {
-      width: 50px; height: 1px;
-      background: linear-gradient(to right, transparent, rgba(196,30,58,0.65), transparent);
-      margin: 22px auto 0;
-    }
-
-    /* ── grid ── */
-    .tiers-grid {
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      gap: 18px;
-      max-width: 1300px;
-      margin: 0 auto;
-      position: relative; z-index: 3;
-    }
-
-    /* ── card ── all identical size ── */
-    .tier-card {
-      flex: 1;
-      min-width: 0;
-      max-width: 240px;
-      background: rgba(255,255,255,0.028);
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.08);
-      display: flex; flex-direction: column;
-      position: relative; overflow: hidden;
-      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-    }
-    .tier-card:hover {
-      transform: translateY(-8px);
-      border-color: rgba(196,30,58,0.35);
-      box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 30px rgba(196,30,58,0.1);
-    }
-
-    /* ── image — uniform container, full image visible ── */
-    .card-img-wrap {
-      padding: 14px 14px 0;
-      flex-shrink: 0;
-    }
-    .card-img-frame {
-      width: 100%;
-      height: 260px;
-      background: #0d0015;
-      border-radius: 4px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card-img-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center center;
-      display: block;
-      filter: brightness(0.88) contrast(1.05) saturate(0.82);
-      transition: filter 0.5s, transform 0.5s;
-    }
-    .tier-card:hover .card-img-frame img {
-      filter: brightness(1) contrast(1.02) saturate(0.92);
-      transform: scale(1.04);
-    }
-
-    /* ── body ── */
-    .card-body {
-      padding: 16px 20px 24px;
-      flex: 1; display: flex; flex-direction: column;
-    }
-    .card-num {
-      font-family: 'Cinzel', serif;
-      font-size: 8px; font-weight: 600; letter-spacing: 0.38em;
-      color: rgba(196,30,58,0.65);
-      text-transform: uppercase; margin-bottom: 5px;
-    }
-    .card-name {
-      font-family: 'Cinzel', serif;
-      font-size: 18px; font-weight: 700;
-      color: #f2e8d5; letter-spacing: 0.05em;
-      line-height: 1.1; margin-bottom: 2px;
-    }
-    .card-price {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 38px; font-weight: 300;
-      color: #f2e8d5; line-height: 1;
-    }
-    .card-price sub {
-      font-size: 14px; color: rgba(242,232,213,0.5);
-      vertical-align: baseline; font-weight: 300;
-    }
-    .card-rule {
-      width: 28px; height: 1px;
-      margin: 13px 0;
-      background: rgba(196,30,58,0.4);
-    }
-    .card-features {
-      list-style: none;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 14.5px; font-weight: 300;
-      color: rgba(242,232,213,0.6);
-      line-height: 1.9; flex: 1; margin-bottom: 20px;
-    }
-    .card-features li { padding-left: 14px; position: relative; }
-    .card-features li::before {
-      content: '—'; position: absolute; left: 0;
-      color: rgba(196,30,58,0.55);
-      font-size: 10px; line-height: 2.2;
-    }
-    .card-cta {
-      display: block; width: 100%;
-      padding: 11px 16px; border-radius: 3px;
-      font-family: 'Cinzel', serif;
-      font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
-      text-align: center; cursor: pointer; text-decoration: none;
-      border: 1px solid rgba(196,30,58,0.45);
-      color: rgba(242,232,213,0.8); background: transparent;
-      transition: border-color 0.25s, color 0.25s, background 0.25s;
-    }
-    .card-cta:hover {
-      border-color: rgba(196,30,58,0.9);
-      color: #f2e8d5; background: rgba(196,30,58,0.12);
-    }
-
-    /* ── slide-in animation (left → right, staggered) ── */
-    .slide-in {
-      opacity: 0;
-      transform: translateX(-70px);
-      transition:
-        opacity 0.7s ease var(--delay, 0ms),
-        transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) var(--delay, 0ms);
-    }
-    .slide-in.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    /* ── header slide-up ── */
-    .tiers-header {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
-    }
-    .tiers-header.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── responsive ── */
-    @media (max-width: 1100px) {
-      .tiers-grid { flex-wrap: wrap; gap: 20px; }
-      .tier-card { max-width: calc(33% - 14px); min-width: 200px; }
-    }
-    @media (max-width: 768px) {
-      #tiers { padding: 80px 20px 100px; }
-      .tiers-grid {
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-      }
-      .tier-card {
-        width: 100%;
-        max-width: 420px;
-      }
-      .card-img-frame { height: 220px; }
-      #hero-title { letter-spacing: 0.1em; }
-    }
-    @media (max-width: 480px) {
-      .tiers-title { font-size: 26px; }
-      .card-img-frame { height: 190px; }
-    }
+    /* ── Section fades ── */
+    .fade-top    { background:linear-gradient(to bottom,#03010a,transparent); }
+    .fade-bottom { background:linear-gradient(to top,#03010a,transparent); }
   </style>
 </head>
-<body style="background:#060009; overflow-x:hidden;">
+<body class="font-body text-ivory">
 
-<div id="scroll-progress-bar"></div>
-
-<nav>
-  <a href="#" class="nav-btn">Patreon</a>
-  <a href="#tiers" class="nav-btn solid">Book a Session</a>
+<!-- ════════ NAV ════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 md:px-12 py-5"
+     style="background:linear-gradient(to bottom,rgba(3,1,10,.96) 60%,transparent);">
+  <span class="font-display text-base md:text-xl tracking-[.25em] text-gold select-none">TINGLY TONES</span>
+  <div class="hidden md:flex items-center gap-8 text-[.7rem] tracking-[.3em] uppercase text-muted">
+    <a href="#vampire"    class="hover:text-ivory transition-colors">The Vampire</a>
+    <a href="#experience" class="hover:text-ivory transition-colors">The Experience</a>
+    <a href="#voice"      class="hover:text-ivory transition-colors">Listen</a>
+    <a href="https://www.patreon.com/TinglyTones" target="_blank"
+       class="px-5 py-2.5 border border-gold/40 text-gold rounded-sm hover:bg-gold hover:text-void transition-all">
+      Join Patreon
+    </a>
+  </div>
+  <a href="https://www.patreon.com/TinglyTones" target="_blank"
+     class="md:hidden text-[.65rem] tracking-[.25em] uppercase border border-gold/40 text-gold px-4 py-2 rounded-sm">
+    Join
+  </a>
 </nav>
 
-<!-- ══ SECTION 1 — HERO VIDEO ══ -->
-<section id="hero">
-  <video id="hero-video" autoplay muted loop playsinline preload="auto">
-    <source src="Man_transforms_into_202603231352.mp4" type="video/mp4" />
-  </video>
-  <div class="hero-grad"></div>
-  <div class="hero-overlay">
-    <h1 id="hero-title">JAMES LAVOIE</h1>
-    <div class="hero-rule"></div>
-    <p id="hero-sub">ASMR. Dark Romance. Made for your ears only.</p>
-  </div>
-  <div id="scroll-hint"><span></span><span></span></div>
-</section>
 
-<!-- ══ SECTION 2 — PRICING ══ -->
-<section id="tiers">
-
-  <!-- Deep glow orbs -->
-  <div class="bg-orb" style="width:600px;height:600px;background:rgba(122,0,32,0.55);top:-80px;left:-140px;opacity:0.13;"></div>
-  <div class="bg-orb" style="width:500px;height:500px;background:rgba(196,30,58,0.5);bottom:-60px;right:-120px;opacity:0.11;"></div>
-  <div class="bg-orb" style="width:350px;height:350px;background:rgba(80,0,20,0.6);top:40%;left:50%;transform:translate(-50%,-50%);opacity:0.09;"></div>
-
-  <!-- Decorative SVG line art -->
-  <svg id="bg-lines" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <!-- flowing curves -->
-    <path d="M-100,200 Q200,80 500,220 T1100,180 T1600,200" fill="none" stroke="#c41e3a" stroke-width="0.8"/>
-    <path d="M-100,400 Q300,280 700,420 T1300,380 T1700,400" fill="none" stroke="#c41e3a" stroke-width="0.6"/>
-    <path d="M-100,600 Q250,480 600,610 T1200,570 T1700,600" fill="none" stroke="#7a0020" stroke-width="0.8"/>
-    <!-- diamond accents -->
-    <polygon points="720,60  728,68  720,76  712,68" fill="none" stroke="#c41e3a" stroke-width="0.8"/>
-    <polygon points="200,300 210,310 200,320 190,310" fill="none" stroke="#7a0020" stroke-width="0.7"/>
-    <polygon points="1240,500 1248,508 1240,516 1232,508" fill="none" stroke="#c41e3a" stroke-width="0.7"/>
-    <polygon points="400,680 406,686 400,692 394,686" fill="none" stroke="#7a0020" stroke-width="0.6"/>
-    <!-- subtle grid lines -->
-    <line x1="0" y1="140" x2="1440" y2="140" stroke="#c41e3a" stroke-width="0.3" stroke-dasharray="4,20"/>
-    <line x1="0" y1="500" x2="1440" y2="500" stroke="#7a0020" stroke-width="0.3" stroke-dasharray="4,20"/>
-    <!-- vertical accent lines -->
-    <line x1="120" y1="0" x2="120" y2="800" stroke="#c41e3a" stroke-width="0.3" stroke-dasharray="3,16"/>
-    <line x1="1320" y1="0" x2="1320" y2="800" stroke="#7a0020" stroke-width="0.3" stroke-dasharray="3,16"/>
-  </svg>
-
-  <!-- Bokeh dots layer (JS-generated) -->
-  <div id="bokeh-layer" style="position:absolute;inset:0;pointer-events:none;z-index:1;"></div>
-
-  <!-- Falling petals layer -->
-  <div id="petals-layer" style="position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;"></div>
-
-  <!-- Horizontal accent lines -->
-  <div class="h-accent" style="top:10%;background:linear-gradient(to right,transparent,rgba(196,30,58,0.08),transparent);"></div>
-  <div class="h-accent" style="top:50%;background:linear-gradient(to right,transparent,rgba(196,30,58,0.06),transparent);"></div>
-  <div class="h-accent" style="top:88%;background:linear-gradient(to right,transparent,rgba(122,0,32,0.08),transparent);"></div>
-
-  <div class="tiers-header">
-    <div class="tiers-eyebrow">Patreon</div>
-    <h2 class="tiers-title">Choose Your Place In His World</h2>
-    <div class="tiers-divider"></div>
+<!-- ════════ SECTION 1 — THE MAN ════════ -->
+<section id="hero" class="relative min-h-screen flex items-center overflow-hidden">
+  <div class="absolute inset-0">
+    <img src="h1.jpeg" alt="TinglyTones"
+         class="w-full h-full object-cover object-center md:object-top"
+         style="filter:brightness(.9) saturate(1.1);">
+    <div class="absolute inset-0"
+         style="background:linear-gradient(120deg,rgba(3,1,10,.72) 0%,rgba(3,1,10,.1) 50%,rgba(3,1,10,.45) 100%);"></div>
+    <div class="absolute inset-0"
+         style="background:radial-gradient(ellipse at 15% 80%,rgba(201,168,76,.07) 0%,transparent 50%);"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-48 fade-bottom"></div>
   </div>
 
-  <div class="tiers-grid">
-
-    <!-- WHISPER -->
-    <div class="tier-card slide-in" style="--delay:0ms">
-      <div class="card-img-wrap">
-        <div class="card-img-frame"><img src="p1.jpg" alt="Whisper" /></div>
-      </div>
-      <div class="card-body">
-        <div class="card-num">I</div>
-        <div class="card-name">Whisper</div>
-        <div class="card-price">$5<sub>/mo</sub></div>
-        <div class="card-rule"></div>
-        <ul class="card-features">
-          <li>Monthly exclusive audio</li>
-          <li>Early content access</li>
-          <li>Members-only feed</li>
-        </ul>
-        <a href="#" class="card-cta">Claim Your Tier</a>
-      </div>
+  <div class="relative z-10 w-full max-w-xl px-6 md:px-16 lg:px-24 pt-28 pb-20">
+    <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-5">For Her Ears Only</p>
+    <h1 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.8rem,9vw,6.5rem)]"
+        style="transition-delay:.1s">
+      The Man<br>
+      <em class="font-normal text-blush" style="font-size:.88em">Behind the Voice</em>
+    </h1>
+    <p class="reveal font-elegant text-[clamp(1.1rem,3vw,1.4rem)] text-muted leading-relaxed mb-10"
+       style="transition-delay:.2s">
+      Close your eyes.<br>Let his voice find you in the dark.
+    </p>
+    <div class="reveal flex flex-wrap gap-4" style="transition-delay:.3s">
+      <a href="#voice"
+         class="px-7 py-4 bg-gold text-void text-[.68rem] tracking-[.3em] uppercase font-semibold hover:bg-glow transition-colors rounded-sm">
+        Hear Him
+      </a>
+      <a href="#pricing"
+         class="px-7 py-4 border border-ivory/20 text-ivory text-[.68rem] tracking-[.3em] uppercase hover:border-gold hover:text-gold transition-all rounded-sm">
+        Choose Your Tier
+      </a>
     </div>
+  </div>
 
-    <!-- SPARKS -->
-    <div class="tier-card slide-in" style="--delay:100ms">
-      <div class="card-img-wrap">
-        <div class="card-img-frame"><img src="p2.jpg" alt="Sparks" /></div>
-      </div>
-      <div class="card-body">
-        <div class="card-num">II</div>
-        <div class="card-name">Sparks</div>
-        <div class="card-price">$5<sub>/mo</sub></div>
-        <div class="card-rule"></div>
-        <ul class="card-features">
-          <li>Bi-weekly audio drops</li>
-          <li>Discord access</li>
-          <li>Behind-the-scenes</li>
-        </ul>
-        <a href="#" class="card-cta">Claim Your Tier</a>
-      </div>
-    </div>
-
-    <!-- ALLURE -->
-    <div class="tier-card slide-in" style="--delay:200ms">
-      <div class="card-img-wrap">
-        <div class="card-img-frame"><img src="p3.jpg" alt="Allure" /></div>
-      </div>
-      <div class="card-body">
-        <div class="card-num">III</div>
-        <div class="card-name">Allure</div>
-        <div class="card-price">$15<sub>/mo</sub></div>
-        <div class="card-rule"></div>
-        <ul class="card-features">
-          <li>Weekly themed audio</li>
-          <li>Exclusive voice messages</li>
-          <li>Priority Discord</li>
-        </ul>
-        <a href="#" class="card-cta">Claim Your Tier</a>
-      </div>
-    </div>
-
-    <!-- MESMIRISE -->
-    <div class="tier-card slide-in" style="--delay:300ms">
-      <div class="card-img-wrap">
-        <div class="card-img-frame"><img src="p4.jpg" alt="Mesmirise" /></div>
-      </div>
-      <div class="card-body">
-        <div class="card-num">IV</div>
-        <div class="card-name">Mesmirise</div>
-        <div class="card-price">$77<sub>/mo</sub></div>
-        <div class="card-rule"></div>
-        <ul class="card-features">
-          <li>Monthly custom scenario</li>
-          <li>Personal voice message</li>
-          <li>Your name used</li>
-          <li>Exclusive content vault</li>
-        </ul>
-        <a href="#" class="card-cta">Claim Your Tier</a>
-      </div>
-    </div>
-
-    <!-- BOND -->
-    <div class="tier-card slide-in" style="--delay:400ms">
-      <div class="card-img-wrap">
-        <div class="card-img-frame"><img src="p5.jpg" alt="Bond" /></div>
-      </div>
-      <div class="card-body">
-        <div class="card-num">V</div>
-        <div class="card-name">Bond</div>
-        <div class="card-price">$160<sub>/mo</sub></div>
-        <div class="card-rule"></div>
-        <ul class="card-features">
-          <li>Private 1-on-1 call</li>
-          <li>Fully custom script</li>
-          <li>Never repeated</li>
-        </ul>
-        <a href="#" class="card-cta">Claim Your Tier</a>
-      </div>
-    </div>
-
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
+    <span class="text-[.6rem] tracking-[.4em] text-muted uppercase">Scroll</span>
+    <div class="w-px h-10 bg-gold/50 animate-pulse"></div>
   </div>
 </section>
 
+
+<!-- ════════ SECTION 2 — THE VAMPIRE ════════ -->
+<section id="vampire" class="relative min-h-screen flex items-center overflow-hidden">
+  <div class="absolute inset-0">
+    <img src="h2.jpeg" alt="The Vampire"
+         class="w-full h-full object-cover object-center md:object-top"
+         style="filter:brightness(.82) saturate(1.25);">
+    <div class="absolute inset-0"
+         style="background:linear-gradient(240deg,rgba(3,1,10,.68) 0%,rgba(107,15,26,.08) 40%,rgba(3,1,10,.6) 100%);"></div>
+    <div class="absolute inset-0"
+         style="background:radial-gradient(ellipse at 65% 45%,rgba(139,38,53,.12) 0%,transparent 55%);"></div>
+    <div class="absolute top-0 left-0 right-0 h-40 fade-top"></div>
+    <div class="absolute bottom-0 left-0 right-0 h-48 fade-bottom"></div>
+  </div>
+
+  <div class="relative z-10 w-full flex justify-end">
+    <div class="max-w-xl px-6 md:px-16 lg:px-24 pt-28 pb-20 text-right">
+      <p class="reveal text-[.7rem] tracking-[.45em] text-blood uppercase mb-5">The Dark Side</p>
+      <h2 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.8rem,9vw,6.5rem)]"
+          style="transition-delay:.1s">
+        The<br><span class="shimmer">Vampire</span>
+      </h2>
+      <p class="reveal font-elegant text-[clamp(1.1rem,3vw,1.4rem)] text-muted leading-relaxed mb-5"
+         style="transition-delay:.2s">
+        He doesn't ask for permission.<br>
+        He already knows what you want.
+      </p>
+      <p class="reveal font-elegant text-xl text-muted/55 italic mb-10"
+         style="transition-delay:.25s">
+        "I can smell your heartbeat from here…"
+      </p>
+      <div class="reveal" style="transition-delay:.3s">
+        <a href="#voice"
+           class="inline-block px-8 py-4 border border-blood/50 text-blush text-[.68rem] tracking-[.3em] uppercase hover:bg-blood/20 hover:border-blood transition-all rounded-sm">
+          Surrender
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════ SECTION 3 — EVERY FANTASY. ONE VOICE. ════════
+  Decision: The essential conversion bridge — shows women
+  *what* they get before the listen/buy CTA.
+  Three pillars: audio intimacy, character range, lifetime access.
+  Stats row anchors with social proof. Dark atmospheric glow.
+════════ -->
+<section id="experience" class="relative py-24 md:py-44 overflow-hidden">
+  <!-- Rose petals video background -->
+  <div class="absolute inset-0">
+    <video autoplay muted loop playsinline
+           class="w-full h-full object-cover"
+           style="filter:brightness(.72) saturate(1.6);">
+      <source src="Small_rose_petals_202603240150.mp4" type="video/mp4">
+    </video>
+    <div class="absolute inset-0"
+         style="background:linear-gradient(180deg,#03010a 0%,rgba(8,2,16,.45) 25%,rgba(8,2,16,.45) 75%,#03010a 100%);"></div>
+    <div class="absolute inset-0 pointer-events-none"
+         style="background:radial-gradient(ellipse at 25% 50%,rgba(201,168,76,.08) 0%,transparent 45%),
+                radial-gradient(ellipse at 75% 50%,rgba(139,38,53,.1) 0%,transparent 45%);"></div>
+  </div>
+
+  <div class="relative z-10 px-6 md:px-12 lg:px-24 max-w-6xl mx-auto">
+
+    <div class="text-center mb-20">
+      <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-4">150+ NSFW Audios &amp; Growing</p>
+      <h2 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.4rem,6vw,5rem)]"
+          style="transition-delay:.1s">
+        Every Fantasy.<br><em class="font-normal text-blush">One Voice.</em>
+      </h2>
+      <div class="orn reveal mb-7" style="transition-delay:.15s">
+        <span class="text-gold text-xl leading-none">✦</span>
+      </div>
+      <p class="reveal font-elegant text-base text-muted/80 max-w-sm mx-auto leading-relaxed"
+         style="transition-delay:.2s">
+        One voice. Every fantasy. Made for <em>you</em>.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+
+      <!-- Card 1 -->
+      <div class="reveal group" style="transition-delay:.1s">
+        <div class="relative h-full rounded-2xl px-8 py-10 overflow-hidden transition-transform duration-400 group-hover:-translate-y-2"
+             style="background:rgba(255,255,255,.04);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(201,168,76,.18);">
+          <!-- Hover glow -->
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none rounded-2xl"
+               style="background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.1) 0%,transparent 65%);"></div>
+          <!-- Number -->
+          <p class="font-display font-black leading-none mb-6 select-none"
+             style="font-size:4.5rem;background:linear-gradient(180deg,rgba(201,168,76,.6) 0%,rgba(201,168,76,.1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            01
+          </p>
+          <h3 class="font-display text-[1.45rem] font-bold text-ivory mb-3 leading-snug">Whispered<br>Just for You</h3>
+          <div class="w-8 h-px mb-4" style="background:rgba(201,168,76,.5)"></div>
+          <p class="font-elegant text-muted text-[1.05rem] leading-relaxed">
+            Close-mic, every breath deliberate. Like he's right there — lips at your ear.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="reveal group" style="transition-delay:.2s">
+        <div class="relative h-full rounded-2xl px-8 py-10 overflow-hidden transition-transform duration-400 group-hover:-translate-y-2"
+             style="background:rgba(255,255,255,.04);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(232,160,160,.18);">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none rounded-2xl"
+               style="background:radial-gradient(ellipse at 50% 0%,rgba(139,38,53,.14) 0%,transparent 65%);"></div>
+          <p class="font-display font-black leading-none mb-6 select-none"
+             style="font-size:4.5rem;background:linear-gradient(180deg,rgba(232,160,160,.65) 0%,rgba(232,160,160,.1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            02
+          </p>
+          <h3 class="font-display text-[1.45rem] font-bold text-ivory mb-3 leading-snug">Infinite<br>Characters</h3>
+          <div class="w-8 h-px mb-4" style="background:rgba(232,160,160,.45)"></div>
+          <p class="font-elegant text-muted text-[1.05rem] leading-relaxed">
+            The lover, the vampire, the stranger. New scenarios drop every single week.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="reveal group" style="transition-delay:.3s">
+        <div class="relative h-full rounded-2xl px-8 py-10 overflow-hidden transition-transform duration-400 group-hover:-translate-y-2"
+             style="background:rgba(255,255,255,.04);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(201,168,76,.18);">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none rounded-2xl"
+               style="background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.1) 0%,transparent 65%);"></div>
+          <p class="font-display font-black leading-none mb-6 select-none"
+             style="font-size:4.5rem;background:linear-gradient(180deg,rgba(201,168,76,.6) 0%,rgba(201,168,76,.1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            03
+          </p>
+          <h3 class="font-display text-[1.45rem] font-bold text-ivory mb-3 leading-snug">Yours to<br>Keep</h3>
+          <div class="w-8 h-px mb-4" style="background:rgba(201,168,76,.5)"></div>
+          <p class="font-elegant text-muted text-[1.05rem] leading-relaxed">
+            Lifetime access on Sparks+. 150+ audios, growing weekly. No expiry.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="reveal grid grid-cols-3 gap-6 md:gap-12 mt-20 pt-14 border-t"
+         style="border-color:rgba(201,168,76,.1);transition-delay:.4s">
+      <div class="text-center">
+        <p class="font-display font-black text-gold leading-none mb-2 text-[clamp(2rem,6vw,3.5rem)]">150+</p>
+        <p class="text-[.65rem] tracking-[.35em] text-muted uppercase">NSFW Audios</p>
+      </div>
+      <div class="text-center">
+        <p class="font-display font-black text-gold leading-none mb-2 text-[clamp(2rem,6vw,3.5rem)]">New</p>
+        <p class="text-[.65rem] tracking-[.35em] text-muted uppercase">Every Week</p>
+      </div>
+      <div class="text-center">
+        <p class="font-display font-black text-gold leading-none mb-2 text-[clamp(2rem,6vw,3.5rem)]">You</p>
+        <p class="text-[.65rem] tracking-[.35em] text-muted uppercase">Are the Star</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════ SECTION 4 — VOICE BUTTON ════════ -->
+<section id="voice" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+  <!-- Raunchy background: h1 image heavily blurred + crimson heat tint + animated glow -->
+  <div class="absolute inset-0">
+    <img src="4th section.jpeg" alt=""
+         class="w-full h-full object-cover object-center"
+         style="filter:brightness(.72) saturate(1.1);transform:scale(1.0);">
+    <!-- Subtle dark veil so text stays readable -->
+    <div class="absolute inset-0"
+         style="background:linear-gradient(160deg,rgba(8,2,16,.38) 0%,rgba(4,1,10,.28) 50%,rgba(8,2,16,.4) 100%);"></div>
+    <!-- Pulsing heat-glow in centre -->
+    <div class="absolute inset-0 pointer-events-none" id="heatGlow"
+         style="background:radial-gradient(ellipse at 50% 55%,rgba(180,30,60,.18) 0%,transparent 55%);
+                animation:heatPulse 4s ease-in-out infinite;"></div>
+  </div>
+  <style>
+    @keyframes heatPulse {
+      0%,100% { opacity:.6; transform:scale(1); }
+      50%      { opacity:1;  transform:scale(1.08); }
+    }
+  </style>
+  <div class="absolute top-0 left-0 right-0 h-32 fade-top"></div>
+  <div class="absolute bottom-0 left-0 right-0 h-32 fade-bottom"></div>
+
+  <div id="particles" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+
+  <div class="relative z-10 text-center px-6 max-w-2xl mx-auto w-full">
+    <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-5">A Taste of What Awaits</p>
+    <h2 class="reveal font-display font-black leading-[1.05] mb-4 text-[clamp(2.4rem,6vw,4.5rem)]"
+        style="transition-delay:.1s">
+      Hear What You've<br><em class="font-normal text-blush">Been Missing</em>
+    </h2>
+    <p class="reveal font-elegant text-[1.15rem] text-muted mb-16 leading-relaxed"
+       style="transition-delay:.2s">
+      Press play. Close your eyes. Let him in.
+    </p>
+
+    <div class="reveal flex justify-center mb-14" style="transition-delay:.3s">
+      <div class="relative flex items-center justify-center" style="width:220px;height:220px">
+        <div class="vring"></div>
+        <div class="vring"></div>
+        <div class="vring"></div>
+        <button id="voiceBtn" onclick="toggleVoice()"
+                class="relative z-10 flex items-center justify-center w-24 h-24 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 select-none"
+                style="background:linear-gradient(135deg,#c9a84c,#8b6914);box-shadow:0 0 50px rgba(201,168,76,.45);"
+                aria-label="Play sample audio">
+          <svg id="icPlay"  class="w-10 h-10 ml-1" fill="#03010a" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="icPause" class="w-10 h-10 hidden" fill="#03010a" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="waveform"
+         class="reveal flex items-center justify-center gap-[3px] h-14 mb-8 px-4"
+         style="transition-delay:.4s"></div>
+
+    <p class="reveal font-elegant text-sm text-muted/40 italic" style="transition-delay:.5s">
+      "This is what it sounds like to be chosen…"
+    </p>
+  </div>
+</section>
+
+
+<!-- ════════ SECTION 5 — PRICING ════════ -->
+<section id="pricing" class="relative py-24 md:py-44 overflow-hidden">
+  <div class="absolute inset-0"
+       style="background:linear-gradient(180deg,#03010a 0%,#060110 50%,#03010a 100%);"></div>
+  <div class="absolute inset-0 pointer-events-none"
+       style="background:radial-gradient(ellipse at 50% 30%,rgba(201,168,76,.05) 0%,transparent 55%);"></div>
+
+  <div class="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto">
+
+    <div class="text-center mb-16">
+      <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-4">Choose Your Desire</p>
+      <h2 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.4rem,6vw,5rem)]"
+          style="transition-delay:.1s">
+        How Close Do You<br><em class="font-normal text-blush">Want to Get?</em>
+      </h2>
+      <p class="reveal font-elegant text-[1.15rem] text-muted max-w-md mx-auto leading-relaxed"
+         style="transition-delay:.2s">
+        From a taste to total surrender —<br>there's a tier for every desire.
+      </p>
+    </div>
+
+    <!-- 8-tier grid: snap-scroll mobile, 4-col desktop -->
+    <div class="snap-row flex gap-5 overflow-x-auto pb-6 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible"
+         style="scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;">
+
+      <!-- #01 Whisper $5 -->
+      <div class="reveal pcard flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid rgba(201,168,76,.22);min-height:440px;transition-delay:.1s">
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image1.jpg" class="w-full h-full object-cover object-top" style="filter:brightness(.55) saturate(1.2);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(3,1,10,.1) 0%,rgba(3,1,10,.55) 55%,rgba(3,1,10,.92) 100%);"></div>
+        </div>
+        <div class="relative z-10 p-7 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">01</p>
+          <p class="text-[.65rem] tracking-[.4em] text-gold uppercase mb-4">Whisper</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-ivory leading-none">$5</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:rgba(201,168,76,.2)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>New audios (1-month access)</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Community chat</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Discord access</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-ivory border border-gold/30 rounded-xl hover:border-gold/70 hover:text-gold transition-all backdrop-blur-sm"
+             style="background:rgba(255,255,255,.04)">Whisper to Me</a>
+        </div>
+      </div>
+
+      <!-- #02 Sparks $10 -->
+      <div class="reveal pcard flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid rgba(201,168,76,.28);min-height:440px;transition-delay:.15s">
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image2.jpg" class="w-full h-full object-cover object-top" style="filter:brightness(.55) saturate(1.3);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(3,1,10,.08) 0%,rgba(3,1,10,.52) 50%,rgba(3,1,10,.92) 100%);"></div>
+        </div>
+        <div class="relative z-10 p-7 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">02</p>
+          <p class="text-[.65rem] tracking-[.4em] text-gold uppercase mb-4">Sparks</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-ivory leading-none">$10</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:rgba(201,168,76,.2)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span><span class="text-ivory">Lifetime</span>&nbsp;access to all audios</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Full 150+ NSFW library</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Community chat</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-ivory border border-gold/30 rounded-xl hover:border-gold/70 hover:text-gold transition-all backdrop-blur-sm"
+             style="background:rgba(255,255,255,.04)">Ignite the Sparks</a>
+        </div>
+      </div>
+
+      <!-- #03 Allure $15 — FEATURED -->
+      <div class="reveal pcard featured flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid #c9a84c;min-height:440px;transition-delay:.2s">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 px-5 py-1.5 rounded-full text-[.6rem] tracking-[.3em] uppercase font-semibold text-void whitespace-nowrap"
+             style="background:#c9a84c">Most Popular</div>
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image3.jpg" class="w-full h-full object-cover object-center" style="filter:brightness(.58) saturate(1.5);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(15,8,2,.08) 0%,rgba(20,12,2,.5) 45%,rgba(3,1,10,.94) 100%);"></div>
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,#c9a84c,transparent);"></div>
+        </div>
+        <div class="relative z-10 p-7 pt-9 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">03</p>
+          <p class="text-[.65rem] tracking-[.4em] text-gold uppercase mb-4">Allure</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-gold leading-none">$15</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:rgba(201,168,76,.35)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Everything in Sparks</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Full artwork &amp; scripts</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Monthly YouTube credits</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Exclusive content</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-void font-semibold rounded-xl hover:opacity-90 transition-opacity"
+             style="background:#c9a84c">Allure Me</a>
+        </div>
+      </div>
+
+      <!-- #04 Mesmerise $77 -->
+      <div class="reveal pcard flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid rgba(232,160,160,.28);min-height:440px;transition-delay:.25s">
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image4.jpg" class="w-full h-full object-cover object-top" style="filter:brightness(.55) saturate(1.6) hue-rotate(-5deg);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(30,3,10,.1) 0%,rgba(20,2,8,.52) 50%,rgba(3,1,10,.94) 100%);"></div>
+        </div>
+        <div class="relative z-10 p-7 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-blush/60 uppercase mb-1">04</p>
+          <p class="text-[.65rem] tracking-[.4em] text-blush uppercase mb-4">Mesmerise</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-ivory leading-none">$77</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:rgba(232,160,160,.2)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-blush shrink-0 mt-0.5">✦</span>All Allure perks</li>
+            <li class="flex gap-2.5"><span class="text-blush shrink-0 mt-0.5">✦</span>Weekly personal voice msgs</li>
+            <li class="flex gap-2.5"><span class="text-blush shrink-0 mt-0.5">✦</span>Priority DMs</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-blush border border-blush/30 rounded-xl hover:border-blush/70 transition-colors backdrop-blur-sm"
+             style="background:rgba(255,255,255,.04)">Mesmerise Me</a>
+        </div>
+      </div>
+
+      <!-- #05 Bond $160 -->
+      <div class="reveal pcard flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid rgba(139,38,53,.38);min-height:440px;transition-delay:.3s">
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image5.jpg" class="w-full h-full object-cover object-top" style="filter:brightness(.55) saturate(1.4);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(40,4,12,.1) 0%,rgba(25,3,8,.52) 50%,rgba(3,1,10,.94) 100%);"></div>
+        </div>
+        <div class="relative z-10 p-7 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-blood/60 uppercase mb-1">05</p>
+          <p class="text-[.65rem] tracking-[.4em] text-blood uppercase mb-4">Bond</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-ivory leading-none">$160</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:rgba(139,38,53,.28)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-blood shrink-0 mt-0.5">✦</span>All Mesmerise perks</li>
+            <li class="flex gap-2.5"><span class="text-blood shrink-0 mt-0.5">✦</span>Personalized attention</li>
+            <li class="flex gap-2.5"><span class="text-blood shrink-0 mt-0.5">✦</span>Unlimited priority msgs</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-ivory rounded-xl hover:opacity-90 transition-opacity"
+             style="background:linear-gradient(135deg,rgba(139,38,53,.7),rgba(107,15,26,.8))">Bond With Me</a>
+        </div>
+      </div>
+
+      <!-- #06 Eternal $470 -->
+      <div class="reveal pcard flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid rgba(107,15,26,.55);min-height:440px;transition-delay:.35s">
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image6.jpg" class="w-full h-full object-cover object-top" style="filter:brightness(.55) saturate(1.7) hue-rotate(-3deg);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(30,2,8,.1) 0%,rgba(18,1,6,.52) 50%,rgba(3,1,10,.94) 100%);"></div>
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(107,15,26,.8),transparent);"></div>
+        </div>
+        <div class="relative z-10 p-7 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-crimson/60 uppercase mb-1">06</p>
+          <p class="text-[.65rem] tracking-[.4em] text-crimson uppercase mb-4">Eternal</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-ivory leading-none">$470</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:rgba(107,15,26,.35)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-crimson shrink-0 mt-0.5">✦</span>All Bond perks</li>
+            <li class="flex gap-2.5"><span class="text-crimson shrink-0 mt-0.5">✦</span>Monthly custom audio</li>
+            <li class="flex gap-2.5"><span class="text-crimson shrink-0 mt-0.5">✦</span>Exclusive 1-on-1 access</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-ivory border border-crimson/40 rounded-xl hover:border-crimson/80 transition-colors backdrop-blur-sm"
+             style="background:rgba(107,15,26,.18)">Eternal Bond</a>
+        </div>
+      </div>
+
+      <!-- #07 Fascination $910 -->
+      <div class="reveal pcard flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid rgba(180,60,90,.45);min-height:440px;transition-delay:.4s;box-shadow:0 0 30px rgba(107,15,26,.18)">
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image7.jpg" class="w-full h-full object-cover object-top" style="filter:brightness(.55) saturate(1.8) hue-rotate(-5deg);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(35,2,10,.1) 0%,rgba(20,1,6,.52) 48%,rgba(3,1,10,.94) 100%);"></div>
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(180,60,90,.7),transparent);"></div>
+        </div>
+        <div class="relative z-10 p-7 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-blush/50 uppercase mb-1">07</p>
+          <p class="text-[.65rem] tracking-[.4em] text-blush uppercase mb-4">Fascination</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-ivory leading-none">$910</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:rgba(180,60,90,.25)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-blush shrink-0 mt-0.5">✦</span>All Eternal perks</li>
+            <li class="flex gap-2.5"><span class="text-blush shrink-0 mt-0.5">✦</span>Weekly custom scenarios</li>
+            <li class="flex gap-2.5"><span class="text-blush shrink-0 mt-0.5">✦</span>Dedicated private access</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-ivory rounded-xl hover:opacity-90 transition-opacity"
+             style="background:linear-gradient(135deg,rgba(139,38,53,.75),rgba(180,60,90,.6))">Fascinate Me</a>
+        </div>
+      </div>
+
+      <!-- #08 Ethereal $2,300 — ULTRA PREMIUM -->
+      <div class="reveal pcard flex-none w-[258px] md:w-auto snap-center rounded-2xl flex flex-col overflow-hidden relative"
+           style="border:1px solid rgba(201,168,76,.55);min-height:440px;transition-delay:.45s;box-shadow:0 0 50px rgba(201,168,76,.1)">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 px-5 py-1.5 rounded-full text-[.6rem] tracking-[.3em] uppercase font-semibold text-void whitespace-nowrap"
+             style="background:linear-gradient(90deg,#c9a84c,#f0d080)">Ethereal</div>
+        <div class="absolute inset-0">
+          <img src="Pricing Section Images/image8.jpg" class="w-full h-full object-cover object-top" style="filter:brightness(.58) saturate(1.6);transform:scale(1.02);">
+          <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(15,10,2,.08) 0%,rgba(10,7,1,.5) 45%,rgba(3,1,10,.94) 100%);"></div>
+          <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,#c9a84c,#f0d080,#c9a84c,transparent);"></div>
+        </div>
+        <div class="relative z-10 p-7 pt-9 flex flex-col flex-1">
+          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">08</p>
+          <p class="text-[.65rem] tracking-[.4em] shimmer uppercase mb-4" style="-webkit-text-fill-color:transparent">Ethereal</p>
+          <div class="flex items-end gap-1 mb-1">
+            <span class="font-display text-5xl font-black text-gold leading-none">$2,300</span>
+            <span class="text-xs text-muted mb-1.5">/mo</span>
+          </div>
+          <div class="h-px my-5" style="background:linear-gradient(90deg,transparent,rgba(201,168,76,.5),transparent)"></div>
+          <ul class="font-elegant text-muted text-[1rem] space-y-3 flex-1 mb-8">
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>All Fascination perks</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Bespoke experiences</li>
+            <li class="flex gap-2.5"><span class="text-gold shrink-0 mt-0.5">✦</span>Ultimate connection</li>
+          </ul>
+          <a href="https://www.patreon.com/TinglyTones" target="_blank"
+             class="block text-center py-3.5 text-[.68rem] tracking-[.3em] uppercase text-void font-semibold rounded-xl hover:opacity-90 transition-opacity"
+             style="background:linear-gradient(135deg,#c9a84c,#f0d080)">Become Mine</a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="py-16 px-6 text-center border-t" style="border-color:rgba(201,168,76,.08)">
+  <p class="font-display text-2xl tracking-[.3em] text-gold mb-3">TINGLY TONES</p>
+  <p class="font-elegant text-muted text-base mb-8 italic">For Her Ears Only</p>
+  <div class="flex justify-center gap-8 text-[.65rem] tracking-[.35em] text-muted uppercase mb-8">
+    <a href="https://www.youtube.com/@tinglytones" target="_blank" class="hover:text-gold transition-colors">YouTube</a>
+    <a href="https://www.patreon.com/TinglyTones" target="_blank" class="hover:text-gold transition-colors">Patreon</a>
+  </div>
+  <p class="text-[.65rem] text-muted/25">© 2025 TinglyTones &nbsp;·&nbsp; 18+ Only</p>
+</footer>
+
+
+<!-- ════════ SCRIPTS ════════ -->
 <script>
-  /* ── scroll-triggered slide-in via IntersectionObserver ── */
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
+/* ── Scroll reveal ── */
+const ro = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => ro.observe(el));
 
-  document.querySelectorAll('.slide-in, .tiers-header').forEach(el => observer.observe(el));
+/* ── Waveform bars (idle state) ── */
+const wf = document.getElementById('waveform');
+const BARS = 44;
+const bars = [];
+for (let i = 0; i < BARS; i++) {
+  const b = document.createElement('div');
+  const h = 4 + Math.abs(Math.sin(i * 0.44)) * 14 + Math.random() * 5;
+  b.style.cssText = `width:3px;height:${h}px;background:rgba(201,168,76,.22);border-radius:2px;transition:height .08s ease`;
+  wf.appendChild(b);
+  bars.push(b);
+}
 
-  /* ── scroll progress + hint ── */
-  window.addEventListener('scroll', () => {
-    const totalH = document.documentElement.scrollHeight - window.innerHeight;
-    document.getElementById('scroll-progress-bar').style.width = (window.scrollY / totalH * 100) + '%';
-    document.getElementById('scroll-hint').style.opacity = Math.max(0, 1 - window.scrollY / 120);
-  }, { passive: true });
+/* ── Floating particles ── */
+const pc = document.getElementById('particles');
+for (let i = 0; i < 22; i++) {
+  const p = document.createElement('div');
+  const sz = Math.random() > .5 ? 2 : 1;
+  const col = Math.random() > .4 ? '#c9a84c' : '#e8a0a0';
+  p.className = 'particle';
+  p.style.cssText = `
+    width:${sz}px;height:${sz}px;background:${col};
+    top:${10+Math.random()*80}%;left:${5+Math.random()*90}%;
+    animation-duration:${5+Math.random()*7}s;
+    animation-delay:-${Math.random()*6}s;
+    opacity:${.12+Math.random()*.3};
+  `;
+  pc.appendChild(p);
+}
 
-  /* ── video autoplay (iOS fallback) ── */
-  const vid = document.getElementById('hero-video');
-  vid.play().catch(() => {});
-  document.addEventListener('touchstart', () => vid.play().catch(() => {}), { once: true });
+/* ── Voice button ── */
+let audioCtx = null, osc = null, gainNode = null, isPlaying = false, raf = null;
 
-  /* ── bokeh dots ── */
-  (function() {
-    const layer = document.getElementById('bokeh-layer');
-    const colors = ['rgba(196,30,58,1)', 'rgba(122,0,32,1)', 'rgba(240,180,180,1)', 'rgba(160,20,50,1)'];
-    for (let i = 0; i < 38; i++) {
-      const d = document.createElement('div');
-      const size = 2 + Math.random() * 5;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const dur = 4 + Math.random() * 8;
-      const delay = -(Math.random() * dur);
-      d.style.cssText = `
-        position:absolute;
-        border-radius:50%;
-        width:${size}px; height:${size}px;
-        left:${Math.random()*100}%;
-        top:${Math.random()*100}%;
-        background:${color};
-        filter:blur(${size > 5 ? 2 : 0.5}px);
-        animation:bokehPulse ${dur.toFixed(1)}s ${delay.toFixed(1)}s ease-in-out infinite;
-        pointer-events:none;
-      `;
-      layer.appendChild(d);
-    }
-  })();
+function toggleVoice() {
+  isPlaying ? stopVoice() : startVoice();
+}
 
-  /* ── falling petals ── */
-  (function() {
-    const layer = document.getElementById('petals-layer');
-    const shapes = [
-      [14,20,'60% 40% 60% 40%/70% 30% 70% 30%'],
-      [18,24,'50% 50% 30% 70%/60% 40% 60% 40%'],
-      [12,18,'70% 30% 50% 50%/50% 50% 70% 30%'],
-    ];
-    const grads = [
-      'linear-gradient(135deg,#f4b0c4,#d05070,#9a2040)',
-      'linear-gradient(145deg,#eea0b8,#c04868,#8a1838)',
-      'linear-gradient(120deg,#f8c0cc,#e07090,#b03050)',
-    ];
-    for (let i = 0; i < 22; i++) {
-      const el = document.createElement('div');
-      const [w,h,br] = shapes[i % shapes.length];
-      const grad = grads[i % grads.length];
-      const left = (i / 22) * 104 - 2;
-      const delay = -(Math.random() * 14);
-      const dur = 8 + Math.random() * 8;
-      const rot = Math.random() * 360;
-      const scale = 0.55 + Math.random() * 0.65;
-      el.style.cssText = `position:absolute;top:0;left:${left}%;width:${w}px;height:${h}px;animation:petalFall ${dur.toFixed(1)}s ${delay.toFixed(1)}s linear infinite;`;
-      const inner = document.createElement('div');
-      inner.style.cssText = `width:100%;height:100%;border-radius:${br};background:${grad};transform:rotate(${rot}deg) scale(${scale.toFixed(2)});opacity:0.65;filter:blur(0.4px);`;
-      el.appendChild(inner);
-      layer.appendChild(el);
-    }
-  })();
+function startVoice() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  osc      = audioCtx.createOscillator();
+  gainNode = audioCtx.createGain();
+  const filter = audioCtx.createBiquadFilter();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(108, audioCtx.currentTime);
+  osc.frequency.setTargetAtTime(96, audioCtx.currentTime + 1.2, 2.5);
+
+  filter.type = 'lowpass';
+  filter.frequency.value = 360;
+  filter.Q.value = 1.4;
+
+  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(0.11, audioCtx.currentTime + 0.7);
+
+  osc.connect(filter);
+  filter.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  osc.start();
+
+  isPlaying = true;
+  document.getElementById('icPlay').classList.add('hidden');
+  document.getElementById('icPause').classList.remove('hidden');
+  document.getElementById('voiceBtn').style.boxShadow = '0 0 70px rgba(201,168,76,.72)';
+  animWave();
+}
+
+function stopVoice() {
+  if (gainNode) gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+  setTimeout(() => { try { osc.stop(); } catch(e) {} }, 460);
+  isPlaying = false;
+  document.getElementById('icPlay').classList.remove('hidden');
+  document.getElementById('icPause').classList.add('hidden');
+  document.getElementById('voiceBtn').style.boxShadow = '0 0 50px rgba(201,168,76,.45)';
+  cancelAnimationFrame(raf);
+  bars.forEach((b, i) => {
+    b.style.height = (4 + Math.abs(Math.sin(i * .44)) * 14 + Math.random() * 5) + 'px';
+    b.style.background = 'rgba(201,168,76,.22)';
+  });
+}
+
+function animWave() {
+  const t = Date.now() * .003;
+  bars.forEach((b, i) => {
+    const h = 4 + Math.abs(Math.sin(t + i * .22)) * 34 + Math.random() * 6;
+    b.style.height = h + 'px';
+    b.style.background = `rgba(201,168,76,${.32 + Math.abs(Math.sin(t + i * .28)) * .6})`;
+  });
+  raf = requestAnimationFrame(animWave);
+}
+
+/* ── Trigger visible elements on load ── */
+window.addEventListener('load', () => {
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight * 1.05) el.classList.add('on');
+  });
+});
 </script>
 
 </body>
