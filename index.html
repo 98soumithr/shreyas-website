@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TinglyTones — For Her Ears Only</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web/dist/vapi.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <!-- Font stack: Cormorant Garamond (display) · Cormorant SC (labels) · Josefin Sans (body/UI) -->
@@ -1202,55 +1203,66 @@ for (let i = 0; i < 22; i++) {
   pc.appendChild(p);
 }
 
-/* ── Voice button ── */
-let audioCtx = null, osc = null, gainNode = null, isPlaying = false, raf = null;
+/* ── VAPI Voice AI ── */
+let vapiInstance = null;
+let vapiActive = false;
+let raf = null;
+
+// Initialize VAPI
+try {
+  vapiInstance = new Vapi('c28ac32f-80b6-4dbb-ad32-c53d70d09107');
+
+  vapiInstance.on('call-start', () => {
+    vapiActive = true;
+    document.getElementById('icPlay').classList.add('hidden');
+    document.getElementById('icPause').classList.remove('hidden');
+    document.getElementById('voiceBtn').style.boxShadow = '0 0 70px rgba(201,168,76,.72)';
+    animWave();
+  });
+
+  vapiInstance.on('call-end', () => {
+    vapiActive = false;
+    document.getElementById('icPlay').classList.remove('hidden');
+    document.getElementById('icPause').classList.add('hidden');
+    document.getElementById('voiceBtn').style.boxShadow = '0 0 50px rgba(201,168,76,.45)';
+    cancelAnimationFrame(raf);
+    bars.forEach((b, i) => {
+      b.style.height = (4 + Math.abs(Math.sin(i * .44)) * 14 + Math.random() * 5) + 'px';
+      b.style.background = 'rgba(201,168,76,.22)';
+    });
+  });
+
+  vapiInstance.on('speech-start', () => {
+    // James is speaking — pulse the button glow
+    document.getElementById('voiceBtn').style.boxShadow = '0 0 90px rgba(201,168,76,.9)';
+  });
+
+  vapiInstance.on('speech-end', () => {
+    // James stopped speaking — return to active glow
+    if (vapiActive) {
+      document.getElementById('voiceBtn').style.boxShadow = '0 0 70px rgba(201,168,76,.72)';
+    }
+  });
+
+  vapiInstance.on('error', (e) => {
+    console.error('VAPI error:', e);
+    vapiActive = false;
+    document.getElementById('icPlay').classList.remove('hidden');
+    document.getElementById('icPause').classList.add('hidden');
+    document.getElementById('voiceBtn').style.boxShadow = '0 0 50px rgba(201,168,76,.45)';
+    cancelAnimationFrame(raf);
+  });
+} catch(e) {
+  console.error('VAPI init failed:', e);
+}
 
 function toggleVoice() {
-  isPlaying ? stopVoice() : startVoice();
-}
-
-function startVoice() {
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-  osc      = audioCtx.createOscillator();
-  gainNode = audioCtx.createGain();
-  const filter = audioCtx.createBiquadFilter();
-
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(108, audioCtx.currentTime);
-  osc.frequency.setTargetAtTime(96, audioCtx.currentTime + 1.2, 2.5);
-
-  filter.type = 'lowpass';
-  filter.frequency.value = 360;
-  filter.Q.value = 1.4;
-
-  gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-  gainNode.gain.linearRampToValueAtTime(0.11, audioCtx.currentTime + 0.7);
-
-  osc.connect(filter);
-  filter.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-  osc.start();
-
-  isPlaying = true;
-  document.getElementById('icPlay').classList.add('hidden');
-  document.getElementById('icPause').classList.remove('hidden');
-  document.getElementById('voiceBtn').style.boxShadow = '0 0 70px rgba(201,168,76,.72)';
-  animWave();
-}
-
-function stopVoice() {
-  if (gainNode) gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
-  setTimeout(() => { try { osc.stop(); } catch(e) {} }, 460);
-  isPlaying = false;
-  document.getElementById('icPlay').classList.remove('hidden');
-  document.getElementById('icPause').classList.add('hidden');
-  document.getElementById('voiceBtn').style.boxShadow = '0 0 50px rgba(201,168,76,.45)';
-  cancelAnimationFrame(raf);
-  bars.forEach((b, i) => {
-    b.style.height = (4 + Math.abs(Math.sin(i * .44)) * 14 + Math.random() * 5) + 'px';
-    b.style.background = 'rgba(201,168,76,.22)';
-  });
+  if (!vapiInstance) return;
+  if (vapiActive) {
+    vapiInstance.stop();
+  } else {
+    vapiInstance.start('7d35d426-000b-4106-bbe6-7df7c6e1591e');
+  }
 }
 
 function animWave() {
