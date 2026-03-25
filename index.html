@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TinglyTones — For Her Ears Only</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Premium font stack: Bodoni Moda (high-fashion headline) · Cinzel (luxury labels) · Cormorant Garamond (editorial body) · Inter (clean UI) -->
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,700;1,6..96,900&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -18,12 +19,13 @@
             blood:   '#8b2635',
             gold:    '#c9a84c',
             glow:    '#f0d080',
-            blush:   '#e8a0a0',
-            ivory:   '#f5f0eb',
-            muted:   '#857878',
+            blush:   '#e8c4c4',
+            ivory:   '#f8f4ef',
+            muted:   '#9a9090',
           },
           fontFamily: {
-            display: ['"Playfair Display"', 'serif'],
+            display: ['"Bodoni Moda"', 'serif'],
+            accent:  ['"Cinzel"', 'serif'],
             elegant: ['"Cormorant Garamond"', 'serif'],
             body:    ['Inter', 'sans-serif'],
           }
@@ -34,7 +36,15 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { background: #03010a; overflow-x: hidden; }
+    body { background: #03010a; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+
+    /* ── Premium typography system ── */
+    /* Bodoni Moda headlines: tight tracking, high contrast weights feel Vogue-editorial */
+    .font-display { letter-spacing: -0.035em; }
+    /* Cinzel eyebrow labels: ultra-wide tracking is the signature luxury editorial look */
+    .font-accent  { letter-spacing: 0.6em; text-transform: uppercase; }
+    /* Cormorant Garamond: slightly larger, more generous line height for editorial elegance */
+    .font-elegant { font-feature-settings: 'kern' 1, 'liga' 1; }
 
     /* ── Scroll reveal ── */
     .reveal        { opacity:0; transform:translateY(40px);  transition: opacity .85s ease, transform .85s ease; }
@@ -104,8 +114,8 @@
 <!-- ════════ NAV ════════ -->
 <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 md:px-12 py-5"
      style="background:linear-gradient(to bottom,rgba(3,1,10,.96) 60%,transparent);">
-  <span class="font-display text-base md:text-xl tracking-[.25em] text-gold select-none">TINGLY TONES</span>
-  <div class="hidden md:flex items-center gap-8 text-[.7rem] tracking-[.3em] uppercase text-muted">
+  <span class="font-accent text-[.72rem] md:text-[.8rem] tracking-[.45em] text-gold select-none font-medium">TINGLY TONES</span>
+  <div class="hidden md:flex items-center gap-8 font-accent text-[.6rem] tracking-[.45em] uppercase text-muted">
     <a href="#vampire"    class="hover:text-ivory transition-colors">The Vampire</a>
     <a href="#experience" class="hover:text-ivory transition-colors">The Experience</a>
     <a href="#voice"      class="hover:text-ivory transition-colors">Listen</a>
@@ -115,7 +125,7 @@
     </a>
   </div>
   <a href="https://www.patreon.com/TinglyTones" target="_blank"
-     class="md:hidden text-[.65rem] tracking-[.25em] uppercase border border-gold/40 text-gold px-4 py-2 rounded-sm">
+     class="md:hidden font-accent text-[.55rem] tracking-[.35em] uppercase border border-gold/40 text-gold px-4 py-2 rounded-sm">
     Join
   </a>
 </nav>
@@ -135,7 +145,7 @@
       transition:opacity 0.8s ease;
     ">
       <div style="
-        font-family:'Playfair Display',serif;
+        font-family:'Bodoni Moda',serif;
         font-size:clamp(18px,3vw,28px);
         letter-spacing:0.35em;
         color:#c9a84c;
@@ -167,16 +177,16 @@
       opacity:0;transition:opacity 0.6s ease,transform 0.6s ease;transform:translateY(20px);
     ">
       <div style="max-width:520px;">
-        <p style="font-family:'Inter',sans-serif;font-size:11px;letter-spacing:0.3em;color:#c9a84c;text-transform:uppercase;margin:0 0 16px 0;">For Her Ears Only</p>
-        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,5.5vw,76px);font-weight:400;line-height:1.1;color:#f5f0eb;margin:0 0 20px 0;letter-spacing:-0.01em;">
+        <p style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.6em;color:#c9a84c;text-transform:uppercase;margin:0 0 20px 0;">For Her Ears Only</p>
+        <h1 style="font-family:'Bodoni Moda',serif;font-size:clamp(36px,5.5vw,80px);font-weight:700;line-height:1.05;color:#f8f4ef;margin:0 0 22px 0;letter-spacing:-0.03em;">
           The Man<br>Behind<br>the Voice
         </h1>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.8vw,22px);color:#e8a0a0;font-style:italic;margin:0 0 36px 0;line-height:1.6;font-weight:300;">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(18px,1.9vw,24px);color:#e8c4c4;font-style:italic;margin:0 0 38px 0;line-height:1.75;font-weight:300;">
           Close your eyes. Let his voice<br>find you in the dark.
         </p>
         <div style="display:flex;gap:16px;flex-wrap:wrap;pointer-events:all;">
-          <a href="#voice" style="font-family:'Inter',sans-serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#03010a;background:#c9a84c;padding:14px 28px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">Hear Him</a>
-          <a href="#pricing" style="font-family:'Inter',sans-serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#c9a84c;border:1px solid rgba(201,168,76,0.4);padding:14px 28px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(201,168,76,0.9)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.4)'">Choose Your Tier</a>
+          <a href="#voice" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#03010a;background:#c9a84c;padding:15px 30px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">Hear Him</a>
+          <a href="#pricing" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#c9a84c;border:1px solid rgba(201,168,76,0.4);padding:15px 30px;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(201,168,76,0.9)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.4)'">Choose Your Tier</a>
         </div>
       </div>
     </div>
@@ -187,8 +197,8 @@
       pointer-events:none;opacity:0;transition:opacity 0.6s ease,transform 0.6s ease;transform:translateY(20px);
     ">
       <div>
-        <p style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.35em;color:rgba(201,168,76,0.55);text-transform:uppercase;margin:0 0 24px 0;">The Collection</p>
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,68px);font-weight:400;color:#f5f0eb;line-height:1.15;margin:0;letter-spacing:-0.01em;">
+        <p style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.6em;color:rgba(201,168,76,0.5);text-transform:uppercase;margin:0 0 28px 0;">The Collection</p>
+        <p style="font-family:'Bodoni Moda',serif;font-size:clamp(32px,5vw,72px);font-weight:700;color:#f8f4ef;line-height:1.08;margin:0;letter-spacing:-0.03em;">
           150+ NSFW Audios.<br><em style="color:#c9a84c;">One Voice.</em>
         </p>
       </div>
@@ -201,9 +211,9 @@
       opacity:0;transition:opacity 0.6s ease,transform 0.6s ease;transform:translateY(20px);
     ">
       <div style="max-width:400px;text-align:right;">
-        <p style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.3em;color:rgba(232,160,160,0.6);text-transform:uppercase;margin:0 0 16px 0;">Now Playing</p>
-        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,54px);font-weight:400;color:#f5f0eb;margin:0 0 16px 0;letter-spacing:-0.01em;line-height:1.15;">The Vampire</h2>
-        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.6vw,20px);color:#857878;font-style:italic;margin:0 0 28px 0;line-height:1.6;">
+        <p style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.6em;color:rgba(232,160,160,0.55);text-transform:uppercase;margin:0 0 20px 0;">Now Playing</p>
+        <h2 style="font-family:'Bodoni Moda',serif;font-size:clamp(28px,4vw,58px);font-weight:700;color:#f8f4ef;margin:0 0 18px 0;letter-spacing:-0.03em;line-height:1.08;">The Vampire</h2>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.7vw,22px);color:#9a9090;font-style:italic;margin:0 0 30px 0;line-height:1.75;">
           He doesn't ask permission.<br>He only asks how long<br>you want him to stay.
         </p>
         <a href="#vampire" style="pointer-events:all;font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#c9a84c;text-decoration:none;letter-spacing:0.05em;border-bottom:1px solid rgba(201,168,76,0.35);padding-bottom:2px;transition:all 0.2s;display:inline-block;" onmouseover="this.style.borderColor='rgba(201,168,76,0.9)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.35)'">Surrender &rarr;</a>
@@ -331,8 +341,8 @@
   <!-- Vampire text -->
   <div class="relative z-10 w-full flex items-center justify-end">
     <div class="max-w-xl px-6 md:px-16 lg:px-24 pt-28 pb-20 text-right">
-      <p class="reveal text-[.7rem] tracking-[.45em] text-blood uppercase mb-5">The Dark Side</p>
-      <h2 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.8rem,9vw,6.5rem)]"
+      <p class="reveal font-accent text-[.6rem] tracking-[.6em] text-blood mb-5">The Dark Side</p>
+      <h2 class="reveal font-display font-black leading-[.98] mb-6 text-[clamp(2.8rem,9vw,6.8rem)]" style="letter-spacing:-0.04em"
           style="transition-delay:.1s">
         The<br><span class="shimmer">Vampire</span>
       </h2>
@@ -381,8 +391,8 @@
   <div class="relative z-10 px-6 md:px-12 lg:px-24 max-w-6xl mx-auto" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
 
     <div class="text-center mb-20">
-      <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-4">150+ NSFW Audios &amp; Growing</p>
-      <h2 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.4rem,6vw,5rem)]"
+      <p class="reveal font-accent text-[.6rem] tracking-[.6em] text-gold mb-4">150+ NSFW Audios &amp; Growing</p>
+      <h2 class="reveal font-display font-black leading-[1.0] mb-6 text-[clamp(2.6rem,6vw,5.2rem)]" style="letter-spacing:-0.035em"
           style="transition-delay:.1s">
         Every Fantasy.<br><em class="font-normal text-blush">One Voice.</em>
       </h2>
@@ -409,9 +419,9 @@
              style="font-size:4.5rem;background:linear-gradient(180deg,rgba(201,168,76,.6) 0%,rgba(201,168,76,.1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
             01
           </p>
-          <h3 class="font-display text-[1.45rem] font-bold text-ivory mb-3 leading-snug">Whispered<br>Just for You</h3>
+          <h3 class="font-display font-bold text-ivory mb-3 leading-snug" style="font-size:1.35rem;letter-spacing:-0.02em">Whispered<br>Just for You</h3>
           <div class="w-8 h-px mb-4" style="background:rgba(201,168,76,.5)"></div>
-          <p class="font-elegant text-muted text-[1.05rem] leading-relaxed">
+          <p class="font-elegant text-muted leading-relaxed" style="font-size:1.1rem;line-height:1.7">
             Close-mic, every breath deliberate. Like he's right there — lips at your ear.
           </p>
         </div>
@@ -427,9 +437,9 @@
              style="font-size:4.5rem;background:linear-gradient(180deg,rgba(232,160,160,.65) 0%,rgba(232,160,160,.1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
             02
           </p>
-          <h3 class="font-display text-[1.45rem] font-bold text-ivory mb-3 leading-snug">Infinite<br>Characters</h3>
+          <h3 class="font-display font-bold text-ivory mb-3 leading-snug" style="font-size:1.35rem;letter-spacing:-0.02em">Infinite<br>Characters</h3>
           <div class="w-8 h-px mb-4" style="background:rgba(232,160,160,.45)"></div>
-          <p class="font-elegant text-muted text-[1.05rem] leading-relaxed">
+          <p class="font-elegant text-muted leading-relaxed" style="font-size:1.1rem;line-height:1.7">
             The lover, the vampire, the stranger. New scenarios drop every single week.
           </p>
         </div>
@@ -445,9 +455,9 @@
              style="font-size:4.5rem;background:linear-gradient(180deg,rgba(201,168,76,.6) 0%,rgba(201,168,76,.1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
             03
           </p>
-          <h3 class="font-display text-[1.45rem] font-bold text-ivory mb-3 leading-snug">Yours to<br>Keep</h3>
+          <h3 class="font-display font-bold text-ivory mb-3 leading-snug" style="font-size:1.35rem;letter-spacing:-0.02em">Yours to<br>Keep</h3>
           <div class="w-8 h-px mb-4" style="background:rgba(201,168,76,.5)"></div>
-          <p class="font-elegant text-muted text-[1.05rem] leading-relaxed">
+          <p class="font-elegant text-muted leading-relaxed" style="font-size:1.1rem;line-height:1.7">
             Lifetime access on Sparks+. 150+ audios, growing weekly. No expiry.
           </p>
         </div>
@@ -459,15 +469,15 @@
          style="border-color:rgba(201,168,76,.1);transition-delay:.4s">
       <div class="text-center">
         <p class="font-display font-black text-gold leading-none mb-2 text-[clamp(2rem,6vw,3.5rem)]">150+</p>
-        <p class="text-[.65rem] tracking-[.35em] text-muted uppercase">NSFW Audios</p>
+        <p class="font-accent text-[.55rem] tracking-[.5em] text-muted">NSFW Audios</p>
       </div>
       <div class="text-center">
         <p class="font-display font-black text-gold leading-none mb-2 text-[clamp(2rem,6vw,3.5rem)]">New</p>
-        <p class="text-[.65rem] tracking-[.35em] text-muted uppercase">Every Week</p>
+        <p class="font-accent text-[.55rem] tracking-[.5em] text-muted">Every Week</p>
       </div>
       <div class="text-center">
         <p class="font-display font-black text-gold leading-none mb-2 text-[clamp(2rem,6vw,3.5rem)]">You</p>
-        <p class="text-[.65rem] tracking-[.35em] text-muted uppercase">Are the Star</p>
+        <p class="font-accent text-[.55rem] tracking-[.5em] text-muted">Are the Star</p>
       </div>
     </div>
 
@@ -569,8 +579,8 @@
   <div id="particles" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
 
   <div class="relative z-10 text-center px-6 max-w-2xl mx-auto w-full">
-    <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-5">A Taste of What Awaits</p>
-    <h2 class="reveal font-display font-black leading-[1.05] mb-4 text-[clamp(2.4rem,6vw,4.5rem)]"
+    <p class="reveal font-accent text-[.6rem] tracking-[.6em] text-gold mb-5">A Taste of What Awaits</p>
+    <h2 class="reveal font-display font-black leading-[1.0] mb-4 text-[clamp(2.6rem,6vw,4.8rem)]" style="letter-spacing:-0.035em"
         style="transition-delay:.1s">
       Hear What You've<br><em class="font-normal text-blush">Been Missing</em>
     </h2>
@@ -615,8 +625,8 @@
   <div class="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto">
 
     <div class="text-center mb-16">
-      <p class="reveal text-[.7rem] tracking-[.45em] text-gold uppercase mb-4">Choose Your Desire</p>
-      <h2 class="reveal font-display font-black leading-[1.05] mb-6 text-[clamp(2.4rem,6vw,5rem)]"
+      <p class="reveal font-accent text-[.6rem] tracking-[.6em] text-gold mb-4">Choose Your Desire</p>
+      <h2 class="reveal font-display font-black leading-[1.0] mb-6 text-[clamp(2.6rem,6vw,5.2rem)]" style="letter-spacing:-0.035em"
           style="transition-delay:.1s">
         How Close Do You<br><em class="font-normal text-blush">Want to Get?</em>
       </h2>
@@ -638,8 +648,8 @@
           <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(3,1,10,.1) 0%,rgba(3,1,10,.55) 55%,rgba(3,1,10,.92) 100%);"></div>
         </div>
         <div class="relative z-10 p-7 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">01</p>
-          <p class="text-[.65rem] tracking-[.4em] text-gold uppercase mb-4">Whisper</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-gold/50 mb-1">01</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-gold mb-4">Whisper</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-ivory leading-none">$5</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -664,8 +674,8 @@
           <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(3,1,10,.08) 0%,rgba(3,1,10,.52) 50%,rgba(3,1,10,.92) 100%);"></div>
         </div>
         <div class="relative z-10 p-7 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">02</p>
-          <p class="text-[.65rem] tracking-[.4em] text-gold uppercase mb-4">Sparks</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-gold/50 mb-1">02</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-gold mb-4">Sparks</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-ivory leading-none">$10</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -693,8 +703,8 @@
           <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,#c9a84c,transparent);"></div>
         </div>
         <div class="relative z-10 p-7 pt-9 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">03</p>
-          <p class="text-[.65rem] tracking-[.4em] text-gold uppercase mb-4">Allure</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-gold/50 mb-1">03</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-gold mb-4">Allure</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-gold leading-none">$15</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -720,8 +730,8 @@
           <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(30,3,10,.1) 0%,rgba(20,2,8,.52) 50%,rgba(3,1,10,.94) 100%);"></div>
         </div>
         <div class="relative z-10 p-7 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-blush/60 uppercase mb-1">04</p>
-          <p class="text-[.65rem] tracking-[.4em] text-blush uppercase mb-4">Mesmerise</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-blush/50 mb-1">04</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-blush mb-4">Mesmerise</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-ivory leading-none">$77</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -746,8 +756,8 @@
           <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(40,4,12,.1) 0%,rgba(25,3,8,.52) 50%,rgba(3,1,10,.94) 100%);"></div>
         </div>
         <div class="relative z-10 p-7 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-blood/60 uppercase mb-1">05</p>
-          <p class="text-[.65rem] tracking-[.4em] text-blood uppercase mb-4">Bond</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-blood/50 mb-1">05</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-blood mb-4">Bond</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-ivory leading-none">$160</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -773,8 +783,8 @@
           <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(107,15,26,.8),transparent);"></div>
         </div>
         <div class="relative z-10 p-7 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-crimson/60 uppercase mb-1">06</p>
-          <p class="text-[.65rem] tracking-[.4em] text-crimson uppercase mb-4">Eternal</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-crimson/50 mb-1">06</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-crimson mb-4">Eternal</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-ivory leading-none">$470</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -800,8 +810,8 @@
           <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,rgba(180,60,90,.7),transparent);"></div>
         </div>
         <div class="relative z-10 p-7 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-blush/50 uppercase mb-1">07</p>
-          <p class="text-[.65rem] tracking-[.4em] text-blush uppercase mb-4">Fascination</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-blush/50 mb-1">07</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-blush mb-4">Fascination</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-ivory leading-none">$910</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -829,8 +839,8 @@
           <div class="absolute top-0 left-0 right-0 h-px" style="background:linear-gradient(90deg,transparent,#c9a84c,#f0d080,#c9a84c,transparent);"></div>
         </div>
         <div class="relative z-10 p-7 pt-9 flex flex-col flex-1">
-          <p class="text-[.65rem] tracking-[.4em] text-gold/60 uppercase mb-1">08</p>
-          <p class="text-[.65rem] tracking-[.4em] shimmer uppercase mb-4" style="-webkit-text-fill-color:transparent">Ethereal</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] text-gold/50 mb-1">08</p>
+          <p class="font-accent text-[.55rem] tracking-[.5em] shimmer mb-4" style="-webkit-text-fill-color:transparent">Ethereal</p>
           <div class="flex items-end gap-1 mb-1">
             <span class="font-display text-5xl font-black text-gold leading-none">$2,300</span>
             <span class="text-xs text-muted mb-1.5">/mo</span>
@@ -855,13 +865,13 @@
 
 <!-- ════════ FOOTER ════════ -->
 <footer class="py-16 px-6 text-center border-t" style="border-color:rgba(201,168,76,.08)">
-  <p class="font-display text-2xl tracking-[.3em] text-gold mb-3">TINGLY TONES</p>
+  <p class="font-accent text-[.85rem] tracking-[.55em] text-gold mb-3">TINGLY TONES</p>
   <p class="font-elegant text-muted text-base mb-8 italic">For Her Ears Only</p>
-  <div class="flex justify-center gap-8 text-[.65rem] tracking-[.35em] text-muted uppercase mb-8">
+  <div class="flex justify-center gap-8 font-accent text-[.55rem] tracking-[.45em] text-muted mb-8">
     <a href="https://www.youtube.com/@tinglytones" target="_blank" class="hover:text-gold transition-colors">YouTube</a>
     <a href="https://www.patreon.com/TinglyTones" target="_blank" class="hover:text-gold transition-colors">Patreon</a>
   </div>
-  <p class="text-[.65rem] text-muted/25">© 2025 TinglyTones &nbsp;·&nbsp; 18+ Only</p>
+  <p class="font-accent text-[.5rem] tracking-[.3em] text-muted/25">© 2025 TinglyTones &nbsp;·&nbsp; 18+ Only</p>
 </footer>
 
 
