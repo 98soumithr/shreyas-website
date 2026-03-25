@@ -107,6 +107,10 @@
     .pricing-card .card-cta:hover { background:rgba(40,40,40,0.9);border-color:rgba(255,255,255,0.45); }
     .pricing-card[data-popular="true"] .card-cta { background:#D4AF37;color:#0A0A0A;border:none; }
     .pricing-card[data-popular="true"] .card-cta:hover { background:#c9a227; }
+    /* CSS fallback: hide pairs 2-4 by default in case GSAP fails to load */
+    .pricing-pair[data-index="1"],
+    .pricing-pair[data-index="2"],
+    .pricing-pair[data-index="3"] { opacity:0; }
     .pricing-dot { width:6px;height:6px;border-radius:50%;background:#F5F0EB;opacity:0.3;transition:all 0.3s; }
     .pricing-dot.active { width:8px;height:8px;opacity:1; }
     /* Mobile stacked pricing */
@@ -1267,69 +1271,73 @@ window.addEventListener('load', () => {
 });
 
 /* ── GSAP Pricing Pinned Scroll (Sofinnova-style) ── */
-if (window.innerWidth >= 768) {
+if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && window.innerWidth >= 768) {
   gsap.registerPlugin(ScrollTrigger);
 
   const pairs = gsap.utils.toArray('.pricing-pair');
 
-  // Set all pairs invisible except first
-  gsap.set(pairs, { opacity: 0, y: 40 });
-  gsap.set(pairs[0], { opacity: 1, y: 0 });
+  if (pairs.length === 4) {
+    // Set all pairs invisible except first
+    gsap.set(pairs, { opacity: 0, y: 40 });
+    gsap.set(pairs[0], { opacity: 1, y: 0 });
 
-  let currentPair = 0;
+    let currentPair = 0;
 
-  function activatePair(index) {
-    if (index === currentPair) return;
-    currentPair = index;
+    function activatePair(index) {
+      if (index === currentPair) return;
+      currentPair = index;
 
-    pairs.forEach((pair, i) => {
-      if (i !== index) {
-        gsap.to(pair, {
-          opacity: 0,
-          y: i < index ? -40 : 40,
-          duration: 0.5,
-          ease: 'power2.in',
-          overwrite: true,
-        });
+      pairs.forEach((pair, i) => {
+        if (i !== index) {
+          gsap.to(pair, {
+            opacity: 0,
+            y: i < index ? -40 : 40,
+            duration: 0.5,
+            ease: 'power2.in',
+            overwrite: true,
+          });
+        }
+      });
+
+      gsap.to(pairs[index], {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: 'power2.out',
+        overwrite: true,
+      });
+
+      document.querySelectorAll('.pricing-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+    }
+
+    ScrollTrigger.create({
+      trigger: '.pricing-wrapper',
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        const index = Math.min(Math.floor(self.progress * 4), 3);
+        activatePair(index);
       }
     });
-
-    gsap.to(pairs[index], {
-      opacity: 1,
-      y: 0,
-      duration: 0.7,
-      ease: 'power2.out',
-      overwrite: true,
-    });
-
-    document.querySelectorAll('.pricing-dot').forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
-    });
   }
-
-  ScrollTrigger.create({
-    trigger: '.pricing-wrapper',
-    start: 'top top',
-    end: 'bottom bottom',
-    onUpdate: (self) => {
-      const index = Math.min(Math.floor(self.progress * 4), 3);
-      activatePair(index);
-    }
-  });
 }
 
 /* ── Section 2 premium text entrance ── */
-gsap.to('#s2-heading', {
-  opacity: 1,
-  y: 0,
-  duration: 1.4,
-  ease: 'power3.out',
-  scrollTrigger: {
-    trigger: '#vampire',
-    start: 'top 60%',
-    toggleActions: 'play none none reverse'
-  }
-});
+if (typeof gsap !== 'undefined') {
+  gsap.to('#s2-heading', {
+    opacity: 1,
+    y: 0,
+    duration: 1.4,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '#vampire',
+      start: 'top 60%',
+      toggleActions: 'play none none reverse'
+    }
+  });
+}
 </script>
 
 </body>
