@@ -37,8 +37,7 @@
   </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
-section { scroll-snap-align: start; }
+    html { scroll-behavior: smooth; }
     body { background: #03010a; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; line-height: 1.7; }
 
     /* ── Premium whitespace system ── */
@@ -495,7 +494,7 @@ section { scroll-snap-align: start; }
 <div style="height:clamp(4rem,10vw,8rem);background:#03010a;"></div>
 
 <!-- ════════ SECTION 2 — STEP INTO SOMETHING ════════ -->
-<section id="vampire" class="relative min-h-screen flex items-center justify-center overflow-hidden snap-start">
+<section id="vampire" class="relative min-h-screen flex items-center justify-center overflow-hidden">
   <!-- Background: section2.jpeg -->
   <div class="absolute inset-0">
     <img src="section2.jpeg" alt=""
