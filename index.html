@@ -98,10 +98,10 @@
     /* ── Pricing card (pinned scroll) ── */
     .pricing-card { position:relative; overflow:hidden; }
     .pricing-card .card-content { position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:48px;border:1px solid rgba(255,255,255,0.12); }
-    .pricing-inner .card-content { padding-top:150px;justify-content:flex-start; }
-    .pricing-inner .card-content > div:first-child { margin-bottom:14px; }
-    .pricing-inner .card-content > div:nth-child(2) { flex:1; }
-    .pricing-inner .card-content > a { margin-top:24px; }
+    .pricing-inner .card-content { padding-top:120px;padding-bottom:40px;justify-content:center;gap:0; }
+    .pricing-inner .card-content > div:first-child { margin-bottom:12px; }
+    .pricing-inner .card-content > div:nth-child(2) { margin-bottom:auto; }
+    .pricing-inner .card-content > a { margin-top:28px; }
     .pricing-card[data-popular="true"] .card-content { border-color:rgba(212,175,55,0.70); }
     .pricing-card .card-cta { width:100%;padding:18px 24px;border-radius:50px;background:rgba(20,20,20,0.8);border:1px solid rgba(255,255,255,0.25);color:#F5F0EB;font-size:12px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;text-align:center;text-decoration:none;display:block; }
     .pricing-card .card-cta:hover { background:rgba(40,40,40,0.9);border-color:rgba(255,255,255,0.45); }
@@ -774,7 +774,7 @@
             <p style="font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;font-weight:400;color:#F5F0EB;margin:4px 0 0;">WHISPER</p>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$5<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$5<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(255,255,255,0.18);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:rgba(255,255,255,0.5);font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;">New audios (1-month access)</span></div>
@@ -794,7 +794,7 @@
             <p style="font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;font-weight:400;color:#F5F0EB;margin:4px 0 0;">SPARKS</p>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$10<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$10<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(255,255,255,0.18);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:rgba(255,255,255,0.5);font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;"><strong style="font-weight:400;color:#fff;">Lifetime</strong> access to all audios</span></div>
@@ -819,7 +819,7 @@
             <span style="display:inline-block;margin-top:8px;padding:4px 14px;border-radius:50px;font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;background:#D4AF37;color:#0A0A0A;font-weight:500;">Most Popular</span>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#D4AF37;line-height:1;margin:0;">$15<span style="font-size:18px;opacity:0.7;vertical-align:super;color:#F5F0EB;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#D4AF37;line-height:1;margin:0;">$15<span style="font-size:18px;opacity:0.7;vertical-align:super;color:#F5F0EB;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(212,175,55,0.35);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#D4AF37;font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;">Everything in Sparks</span></div>
@@ -840,7 +840,7 @@
             <p style="font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;font-weight:400;color:#e8c4c4;margin:4px 0 0;">MESMERISE</p>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$77<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$77<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(255,255,255,0.18);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:rgba(232,196,196,0.5);font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;">All Allure perks</span></div>
@@ -864,7 +864,7 @@
             <p style="font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;font-weight:400;color:#8b2635;margin:4px 0 0;">BOND</p>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$160<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$160<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(255,255,255,0.18);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:rgba(139,38,53,0.7);font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;">All Mesmerise perks</span></div>
@@ -884,7 +884,7 @@
             <p style="font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;font-weight:400;color:#6b0f1a;margin:4px 0 0;">ETERNAL</p>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$470<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$470<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(255,255,255,0.18);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:rgba(107,15,26,0.7);font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;">All Bond perks</span></div>
@@ -908,7 +908,7 @@
             <p style="font-family:'Cormorant SC',serif;font-size:13px;letter-spacing:0.25em;text-transform:uppercase;font-weight:400;color:#e8c4c4;margin:4px 0 0;">FASCINATION</p>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$910<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#F5F0EB;line-height:1;margin:0;">$910<span style="font-size:18px;opacity:0.7;vertical-align:super;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(255,255,255,0.18);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:rgba(232,196,196,0.5);font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;">All Eternal perks</span></div>
@@ -929,7 +929,7 @@
             <span style="display:inline-block;margin-top:8px;padding:4px 14px;border-radius:50px;font-family:'Josefin Sans',sans-serif;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;background:linear-gradient(90deg,#c9a84c,#f0d080);color:#0A0A0A;font-weight:500;">Ultra Premium</span>
           </div>
           <div>
-            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(64px,7vw,96px);font-weight:300;color:#D4AF37;line-height:1;margin:0;">$2,300<span style="font-size:18px;opacity:0.7;vertical-align:super;color:#F5F0EB;">/mo</span></p>
+            <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(56px,5.5vw,82px);font-weight:300;color:#D4AF37;line-height:1;margin:0;">$2,300<span style="font-size:18px;opacity:0.7;vertical-align:super;color:#F5F0EB;">/mo</span></p>
             <hr style="border:none;border-top:1px solid rgba(212,175,55,0.35);margin:24px 0;">
             <div style="display:flex;flex-direction:column;gap:14px;">
               <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#D4AF37;font-size:10px;margin-top:4px;">✦</span><span style="font-family:'Josefin Sans',sans-serif;font-size:15px;color:#F5F0EB;font-weight:300;line-height:1.5;">All Fascination perks</span></div>
