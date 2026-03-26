@@ -1213,11 +1213,10 @@ let raf = null;
 (async () => {
   try {
     const module = await import('https://cdn.jsdelivr.net/npm/@vapi-ai/web/+esm');
-    const Vapi = module.default;
+    const Vapi = (typeof module.default === 'object' && module.default.default) ? module.default.default : module.default;
     vapiInstance = new Vapi('c28ac32f-80b6-4dbb-ad32-c53d70d09107');
 
     vapiInstance.on('call-start', () => {
-      vapiActive = false;
       vapiLoading = false;
       vapiActive = true;
       document.getElementById('icPlay').classList.add('hidden');
